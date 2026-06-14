@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>اتحاد شباب الوطن – الإسكندرية | كيان شبابي معتمد</title>
+  <meta name="description" content="اتحاد شباب الوطن - الإسكندرية، كيان شبابي معتمد يتبع وزارة الشباب والرياضة المصرية. يضم 10 لجان متخصصة لتنمية قدرات الشباب وتأهيل الكوادر القيادية."/>
+  <meta name="keywords" content="اتحاد شباب الوطن, الإسكندرية, وزارة الشباب والرياضة, كيان شبابي, شباب مصر, جوهر نبيل, اتحاد شباب وطن مصر"/>
+  <meta name="author" content="اتحاد شباب الوطن – الإسكندرية"/>
+  <meta name="robots" content="index, follow"/>
+  <meta name="theme-color" content="#0f172a" media="(prefers-color-scheme:dark)"/>
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme:light)"/>
+  <meta name="google-site-verification" content="ujFvjc_Z1hZ_748VW2V-P3HiznC06uWIU9MJVmObwzA" />
+  <link rel="canonical" href="https://watan-alex.netlify.app/"/>
+  <link rel="sitemap" type="application/xml" href="https://watan-alex.netlify.app/sitemap.xml"/>
+  <link rel="icon" type="image/jpeg" href="logo-union.jpg"/>
+  <link rel="apple-touch-icon" href="logo-union.jpg"/>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "اتحاد شباب الوطن – الإسكندرية",
+    "url": "https://watan-alex.netlify.app/",
+    "logo": "https://watan-alex.netlify.app/logo-union.jpg",
+    "description": "كيان شبابي معتمد يتبع وزارة الشباب والرياضة المصرية"
+  }
+  </script>
+  <!-- Open Graph (فيسبوك) -->
+  <meta property="og:type" content="website"/>
+  <meta property="og:title" content="اتحاد شباب الوطن – الإسكندرية | كيان شبابي معتمد"/>
+  <meta property="og:description" content="كيان شبابي معتمد يتبع وزارة الشباب والرياضة المصرية. نبني جيلاً واعياً قادراً على قيادة التغيير."/>
+  <meta property="og:image" content="logo-union.jpg"/>
+  <meta property="og:url" content="https://watanyouth-alex.netlify.app/"/>
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" content="اتحاد شباب الوطن – الإسكندرية"/>
+  <meta name="twitter:description" content="كيان شبابي معتمد يتبع وزارة الشباب والرياضة المصرية."/>
+  <meta name="twitter:image" content="logo-union.jpg"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <link rel="stylesheet" href="style.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="supabase-config.js"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)};gtag('js',new Date());gtag('config','G-XXXXXXXXXX');</script>
+</head>
+<body>
+
+<!-- ========== NAVBAR ========== -->
+<header id="navbar">
+  <div class="nav-container">
+    <div class="nav-logo" onclick="window.scrollTo({top:0,behavior:'smooth'})" style="cursor:pointer">
+      <img src="logo-union.jpg" alt="شعار الاتحاد" class="nav-logo-img"/>
+      <div class="logo-text">
+        <span class="logo-title">اتحاد شباب الوطن</span>
+        <span class="logo-sub">الإسكندرية</span>
+      </div>
+    </div>
+    <nav class="nav-links" id="navLinks">
+      <a href="#home">الرئيسية</a>
+      <a href="#about">من نحن</a>
+      <a href="#committees">اللجان</a>
+      <a href="#news">الأخبار</a>
+      <a href="#leaders">القيادات</a>
+      <a href="join.html" class="nav-cta">انضم إلينا</a>
+    </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="تبديل الوضع المظلم" onclick="toggleTheme()"><i class="fas fa-moon"></i></button>
+    <button class="hamburger" id="hamburger" aria-label="فتح القائمة">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#home" onclick="closeMobile()">الرئيسية</a>
+    <a href="#about" onclick="closeMobile()">من نحن</a>
+    <a href="#committees" onclick="closeMobile()">اللجان</a>
+    <a href="#news" onclick="closeMobile()">الأخبار</a>
+    <a href="#leaders" onclick="closeMobile()">القيادات</a>
+    <a href="join.html" onclick="closeMobile()">انضم إلينا</a>
+    <a href="#" onclick="toggleTheme();closeMobile();" style="color:var(--text-mid);font-size:.9rem"><i class="fas fa-moon" id="mobileThemeIcon"></i> الوضع المظلم</a>
+  </div>
+</header>
+
+<!-- ========== HERO ========== -->
+<section id="home" class="hero">
+  <div class="hero-bg-shape shape-1"></div>
+  <div class="hero-bg-shape shape-2"></div>
+  <div class="hero-bg-shape shape-3"></div>
+  <div class="hero-content">
+    <div class="hero-logos fade-in-up delay-1">
+      <img src="logo-ministry.jpg" alt="وزارة الشباب" class="hero-logo"/>
+      <div class="hero-logo-divider"></div>
+      <img src="logo-union.jpg" alt="اتحاد شباب الوطن" class="hero-logo"/>
+    </div>
+    <div class="hero-badge fade-in-up delay-2">اتحاد شباب وطن مصر – فرع الإسكندرية</div>
+    <h1 class="hero-title fade-in-up delay-3">
+      اتحاد شباب الوطن
+      <span class="title-highlight">الإسكندرية</span>
+    </h1>
+    <p class="hero-subtitle fade-in-up delay-4">نبني جيلاً واعياً قادراً على قيادة التغيير وصناعة المستقبل،<br/>بروح المواطنة وعزيمة الشباب.</p>
+    <div class="hero-actions fade-in-up delay-5">
+      <a href="join.html" class="btn btn-primary"><i class="fas fa-user-plus"></i> انضم إلينا الآن</a>
+      <a href="#about" class="btn btn-outline"><i class="fas fa-info-circle"></i> تعرّف علينا</a>
+    </div>
+    <div class="hero-stats fade-in-up delay-5">
+      <div class="stat-item"><span class="stat-num" id="commCountStat">10</span><span class="stat-label">لجان متخصصة</span></div>
+      <div class="stat-divider"></div>
+      <div class="stat-item"><span class="stat-num">20,000+</span><span class="stat-label">عضو على مستوى الجمهورية</span></div>
+      <div class="stat-divider"></div>
+      <div class="stat-item"><span class="stat-num">50+</span><span class="stat-label">اتفاقية شراكة</span></div>
+    </div>
+  </div>
+  <div class="scroll-indicator"><i class="fas fa-chevron-down"></i></div>
+</section>
+
+<!-- ========== ABOUT ========== -->
+<section id="about" class="section about-section">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-tag">تعرّف علينا</span>
+      <h2 class="section-title">من نحن</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="about-grid">
+      <div class="about-text reveal">
+        <h3>من هو كيان اتحاد شباب الوطن - الإسكندرية؟</h3>
+        <p>هو كيان شبابي معتمد يتبع وزارة الشباب والرياضة المصرية ويتبع كيان اتحاد شباب وطن مصر، ويعمل تحت رعاية معالي الدكتور جوهر نبيل. يهدف الاتحاد إلى تنمية قدرات الشباب وتأهيل كوادر قيادية قادرة على مواكبة سوق العمل، مع تعزيز روح المواطنة والانتماء لديهم. كما يسعى الاتحاد لتمكين الشباب من اكتشاف مشكلاتهم والقدرة على حلها، ودعم المبتكرين والمتميزين علمياً ورياضياً بما يتماشى مع رؤية مصر 2030.</p>
+        <div class="about-achievements">
+          <div class="achieve-item"><i class="fas fa-users"></i><div><strong>+20,000 عضو</strong><span>على مستوى الجمهورية</span></div></div>
+          <div class="achieve-item"><i class="fas fa-handshake"></i><div><strong>+50 اتفاقية</strong><span>مع مؤسسات وشركات ومستشفيات</span></div></div>
+          <div class="achieve-item"><i class="fas fa-trophy"></i><div><strong>مؤتمرات رئاسية</strong><span>مع رئيس الجمهورية ووزير الشباب</span></div></div>
+        </div>
+      </div>
+      <div class="about-visual reveal delay-2">
+        <div class="about-card-main">
+          <img src="logo-union.jpg" alt="شعار الاتحاد" class="about-main-logo"/>
+          <h4>رعاية وزارة الشباب والرياضة</h4>
+          <p>تحت إشراف معالي الدكتور جوهر نبيل</p>
+          <div class="about-badge-row">
+            <span class="badge"><i class="fas fa-check-circle"></i> كيان معتمد</span>
+            <span class="badge"><i class="fas fa-check-circle"></i> رؤية 2030</span>
+          </div>
+        </div>
+        <div class="minister-card reveal delay-3">
+          <img src="minister.jpg" alt="الوزير" class="minister-img"/>
+          <div class="minister-info">
+            <strong>د. جوهر نبيل</strong>
+            <span>وزير الشباب والرياضة</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== COMMITTEES ========== -->
+<section id="committees" class="section committees-section">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-tag">هيكلنا</span>
+      <h2 class="section-title">اللجان</h2>
+      <div class="section-line"></div>
+      <p class="section-desc" id="commSectionDesc">يضم الاتحاد <span id="commCountDesc">10</span> لجان متخصصة — اضغط على أي لجنة لعرض تفاصيلها وقياداتها</p>
+    </div>
+    <div class="committees-grid" id="committeesGrid"></div>
+    <div class="committees-notice reveal">
+      <i class="fas fa-bell"></i>
+      <span>انتظروا قريباً بوست تعريفي لكل لجنة على مواقع التواصل الاجتماعي!</span>
+    </div>
+  </div>
+</section>
+
+<!-- ========== NEWS ========== -->
+<section id="news" class="section news-section">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-tag">آخر المستجدات</span>
+      <h2 class="section-title">الأخبار</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="news-grid" id="newsGrid"></div>
+  </div>
+</section>
+
+<!-- ========== LEADERS ========== -->
+<section id="leaders" class="section leaders-section">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-tag">فريق العمل</span>
+      <h2 class="section-title">قيادات اللجان</h2>
+      <div class="section-line"></div>
+      <p class="section-desc">رئيس وطاقم كل لجنة — اضغط على اللجنة لعرض صفحتها الكاملة</p>
+    </div>
+    <div class="leaders-grid" id="leadersGrid"></div>
+  </div>
+</section>
+
+<!-- ========== SOCIAL ========== -->
+<section id="social" class="section social-section">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-tag">تواصل معنا</span>
+      <h2 class="section-title">منصات التواصل</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="social-grid">
+      <a href="https://www.facebook.com/share/1CV5joGync/" target="_blank" class="social-card facebook reveal">
+        <div class="social-icon"><i class="fab fa-facebook-f"></i></div>
+        <div class="social-info"><h4>فيسبوك</h4><p>تابعنا على الفيسبوك</p></div>
+        <i class="fas fa-arrow-left social-arrow"></i>
+      </a>
+      <a href="https://www.instagram.com/shabab_alwatan_alex?igsh=OWZkc213bTIxdnBs" target="_blank" class="social-card instagram reveal delay-1">
+        <div class="social-icon"><i class="fab fa-instagram"></i></div>
+        <div class="social-info"><h4>إنستغرام</h4><p>شاهد صورنا وفعالياتنا</p></div>
+        <i class="fas fa-arrow-left social-arrow"></i>
+      </a>
+      <a href="https://api.whatsapp.com/message/WJUICCUCNYEON1?autoload=1&app_absent=0" target="_blank" class="social-card whatsapp reveal delay-2">
+        <div class="social-icon"><i class="fab fa-whatsapp"></i></div>
+        <div class="social-info"><h4>واتساب</h4><p>تحدّث معنا مباشرةً</p></div>
+        <i class="fas fa-arrow-left social-arrow"></i>
+      </a>
+      <a href="https://www.tiktok.com/@alwatan.youth.uni" target="_blank" class="social-card tiktok reveal delay-3">
+        <div class="social-icon"><i class="fab fa-tiktok"></i></div>
+        <div class="social-info"><h4>تيك توك</h4><p>تابعنا على تيك توك</p></div>
+        <i class="fas fa-arrow-left social-arrow"></i>
+      </a>
+      <a href="mailto:alwatanyouthunionalexandria@gmail.com" target="_blank" class="social-card email reveal delay-4">
+        <div class="social-icon"><i class="fas fa-envelope"></i></div>
+        <div class="social-info"><h4>جيميل</h4><p>راسلنا على البريد</p></div>
+        <i class="fas fa-arrow-left social-arrow"></i>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ========== JOIN ========== -->
+<section id="join" class="section join-section">
+  <div class="join-bg-shape"></div>
+  <div class="container join-container">
+    <div class="join-content reveal">
+      <h2>كن جزءاً من التغيير</h2>
+      <p>انضم إلى اتحاد شباب الوطن – الإسكندرية، وكن أحد صُنّاع المستقبل.</p>
+    </div>
+    <div class="join-form-wrap reveal">
+      <div class="jf-steps">
+        <span class="jf-step active" data-step="1">1</span>
+        <span class="jf-step-line"></span>
+        <span class="jf-step" data-step="2">2</span>
+        <span class="jf-step-line"></span>
+        <span class="jf-step" data-step="3">3</span>
+      </div>
+      <form id="joinForm" onsubmit="event.preventDefault(); submitApplication()">
+        <div class="jf-step-content" data-step="1">
+          <div class="jf-group">
+            <label><i class="fas fa-user"></i> الاسم الرباعي</label>
+            <input type="text" id="jf-name" required placeholder="الاسم بالكامل"/>
+          </div>
+          <div class="jf-group">
+            <label><i class="fas fa-id-card"></i> الرقم القومي</label>
+            <input type="text" id="jf-national" required placeholder="١٤ رقم"/>
+            <div id="jf-national-info" style="font-size:.8rem;margin-top:.3rem;min-height:1.2rem;color:rgba(255,255,255,.7)"></div>
+          </div>
+          <button type="button" class="btn btn-primary btn-full jf-next" onclick="jfNextStep(2)"><i class="fas fa-arrow-right"></i> التالي</button>
+        </div>
+        <div class="jf-step-content" data-step="2" style="display:none">
+          <div class="jf-group">
+            <label><i class="fas fa-phone"></i> رقم الهاتف</label>
+            <input type="tel" id="jf-phone" required placeholder="مثال: 010xxxxxxx"/>
+          </div>
+          <div class="jf-group">
+            <label><i class="fab fa-whatsapp"></i> رقم الواتساب</label>
+            <input type="tel" id="jf-whatsapp" required placeholder="مثال: 010xxxxxxx"/>
+          </div>
+          <div class="jf-group">
+            <label><i class="fas fa-home"></i> العنوان</label>
+            <input type="text" id="jf-address" placeholder="العنوان بالتفصيل"/>
+          </div>
+          <div class="jf-group">
+            <label><i class="fas fa-graduation-cap"></i> المؤهل الدراسي</label>
+            <input type="text" id="jf-qualification" placeholder="مؤهل عالي / متوسط ..."/>
+          </div>
+          <div style="display:flex;gap:.75rem">
+            <button type="button" class="btn btn-primary btn-full jf-next" onclick="jfNextStep(3)"><i class="fas fa-arrow-right"></i> التالي</button>
+            <button type="button" class="btn btn-form-sec btn-full" onclick="jfPrevStep(1)"><i class="fas fa-arrow-left"></i> السابق</button>
+          </div>
+        </div>
+        <div class="jf-step-content" data-step="3" style="display:none">
+          <div class="jf-group">
+            <label><i class="fas fa-users"></i> الانضمام للجنة</label>
+            <select id="jf-committee" required>
+              <option value="">-- اختر اللجنة --</option>
+            </select>
+          </div>
+          <div class="jf-group">
+            <label><i class="fas fa-briefcase"></i> الخبرات السابقة (إن وجدت)</label>
+            <textarea id="jf-experience" rows="3" placeholder="اذكر خبراتك السابقة في العمل التطوعي أو القيادي..."></textarea>
+          </div>
+          <div style="display:flex;gap:.75rem">
+            <button type="submit" class="btn btn-primary btn-full" id="jf-submit">
+              <i class="fas fa-paper-plane"></i> إرسال الطلب
+            </button>
+            <button type="button" class="btn btn-form-sec btn-full" onclick="jfPrevStep(2)"><i class="fas fa-arrow-left"></i> السابق</button>
+          </div>
+        </div>
+        <div id="jf-msg" style="display:none;margin-top:.75rem;text-align:center;font-weight:700"></div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ========== FOOTER ========== -->
+<footer class="footer">
+  <div class="container footer-grid">
+    <div class="footer-brand">
+      <div class="footer-logo">
+        <img src="logo-union.jpg" alt="شعار"/>
+        <span>اتحاد شباب الوطن – الإسكندرية</span>
+      </div>
+      <p>كيان شبابي معتمد يتبع وزارة الشباب والرياضة المصرية.</p>
+      <div class="footer-socials">
+        <a href="https://www.facebook.com/share/1CV5joGync/" target="_blank"><i class="fab fa-facebook-f"></i></a>
+        <a href="https://www.instagram.com/shabab_alwatan_alex?igsh=OWZkc213bTIxdnBs" target="_blank"><i class="fab fa-instagram"></i></a>
+        <a href="https://api.whatsapp.com/message/WJUICCUCNYEON1?autoload=1&app_absent=0" target="_blank"><i class="fab fa-whatsapp"></i></a>
+        <a href="https://www.tiktok.com/@alwatan.youth.uni" target="_blank"><i class="fab fa-tiktok"></i></a>
+        <a href="mailto:alwatanyouthunionalexandria@gmail.com" target="_blank"><i class="fas fa-envelope"></i></a>
+      </div>
+    </div>
+    <div class="footer-links">
+      <h4>روابط سريعة</h4>
+      <ul>
+        <li><a href="#home"><i class="fas fa-chevron-left"></i> الرئيسية</a></li>
+        <li><a href="#about"><i class="fas fa-chevron-left"></i> من نحن</a></li>
+        <li><a href="#committees"><i class="fas fa-chevron-left"></i> اللجان</a></li>
+        <li><a href="#news"><i class="fas fa-chevron-left"></i> الأخبار</a></li>
+        <li><a href="#leaders"><i class="fas fa-chevron-left"></i> القيادات</a></li>
+        <li><a href="join.html"><i class="fas fa-chevron-left"></i> انضم إلينا</a></li>
+      </ul>
+    </div>
+    <div class="footer-contact">
+      <h4>تواصل معنا</h4>
+      <ul>
+        <li><i class="fas fa-map-marker-alt"></i> الإسكندرية، مصر</li>
+        <li><i class="fas fa-globe"></i> اتحاد شباب وطن مصر</li>
+      </ul>
+      <a href="join.html" class="btn btn-primary footer-join-btn">
+        <i class="fas fa-user-plus"></i> انضم إلينا
+      </a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="container footer-bottom-inner">
+      <p>© ٢٠٢٦ اتحاد شباب الوطن – الإسكندرية. جميع الحقوق محفوظة.</p>
+      <p>تحت رعاية وزارة الشباب والرياضة المصرية</p>
+      <p class="designer-credit"><i class="fas fa-code"></i> تصميم وبرمجة: <strong>م. محمد رامي</strong> – رئيس لجنة الإعلام</p>
+    </div>
+  </div>
+</footer>
+
+<!-- ========== COMMITTEE DETAIL PAGE (full overlay) ========== -->
+<div class="page-overlay" id="committeeDetail" style="display:none;">
+  <div class="page-inner">
+    <button class="page-back" onclick="closeCommitteeDetail()">
+      <i class="fas fa-arrow-right"></i> رجوع للرئيسية
+    </button>
+    <div class="page-content" id="committeeDetailContent"></div>
+  </div>
+</div>
+
+
+
+<div id="bottomNav" class="bottom-nav">
+  <a href="#home" data-section="home"><i class="fas fa-home"></i><span>الرئيسية</span></a>
+  <a href="#about" data-section="about"><i class="fas fa-info-circle"></i><span>من نحن</span></a>
+  <a href="#leaders" data-section="leaders"><i class="fas fa-users"></i><span>القيادات</span></a>
+  <a href="#news" data-section="news"><i class="fas fa-newspaper"></i><span>الأخبار</span></a>
+  <a href="join.html"><i class="fas fa-user-plus"></i><span>انضم</span></a>
+</div>
+<script src="script.js"></script>
+</body>
+</html>

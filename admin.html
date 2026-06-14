@@ -1,0 +1,2953 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>لوحة إدارة – اتحاد شباب الوطن</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+    <script src="supabase-config.js"></script>
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0
+        }
+        
+         :root {
+            --p: #1a56db;
+            --pd: #1240a8;
+            --a: #0ea5e9;
+            --al: #bae6fd;
+            --w: #fff;
+            --og: #f8fafc;
+            --lg: #f1f5f9;
+            --mg: #e2e8f0;
+            --td: #0f172a;
+            --tm: #475569;
+            --tl: #94a3b8;
+            --ok: #10b981;
+            --err: #ef4444;
+            --r8: 8px;
+            --r16: 16px;
+            --r24: 24px;
+            --rf: 9999px;
+            --font: 'Cairo', Arial, sans-serif;
+        }
+        
+        body {
+            font-family: var(--font);
+            background: #eef2fb;
+            color: var(--td);
+            direction: rtl;
+            min-height: 100vh
+        }
+        
+        a {
+            text-decoration: none;
+            color: inherit
+        }
+        
+        img {
+            max-width: 100%;
+            display: block
+        }
+        
+        button {
+            font-family: var(--font);
+            cursor: pointer;
+            border: none;
+            background: none
+        }
+        
+        input,
+        textarea,
+        select {
+            font-family: var(--font)
+        }
+        
+         ::-webkit-scrollbar {
+            width: 5px
+        }
+        
+         ::-webkit-scrollbar-thumb {
+            background: var(--p);
+            border-radius: 3px
+        }
+        /* Layout */
+        
+        .layout {
+            display: flex;
+            min-height: 100vh
+        }
+        
+        .sidebar {
+            width: 260px;
+            background: var(--td);
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 100;
+            transition: transform .3s
+        }
+        
+        .sidebar-logo {
+            padding: 1.5rem 1.25rem 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, .1);
+            display: flex;
+            align-items: center;
+            gap: .75rem
+        }
+        
+        .sidebar-logo img {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            object-fit: contain;
+            background: rgba(255, 255, 255, .1);
+            padding: 4px
+        }
+        
+        .sidebar-logo-text .t1 {
+            font-size: .95rem;
+            font-weight: 900;
+            color: #fff;
+            display: block
+        }
+        
+        .sidebar-logo-text .t2 {
+            font-size: .72rem;
+            color: rgba(255, 255, 255, .5);
+            display: block
+        }
+        
+        .sidebar-nav {
+            flex: 1;
+            padding: 1rem 0;
+            overflow-y: auto
+        }
+        
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: .75rem;
+            padding: .75rem 1.25rem;
+            color: rgba(255, 255, 255, .65);
+            font-size: .9rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all .2s;
+            border-right: 3px solid transparent
+        }
+        
+        .nav-item:hover {
+            color: #fff;
+            background: rgba(255, 255, 255, .06)
+        }
+        
+        .nav-item.active {
+            color: #fff;
+            background: rgba(26, 86, 219, .3);
+            border-right-color: var(--a)
+        }
+        
+        .nav-item i {
+            width: 20px;
+            text-align: center;
+            font-size: 1rem
+        }
+        
+        .sidebar-footer {
+            padding: 1rem 1.25rem;
+            border-top: 1px solid rgba(255, 255, 255, .1)
+        }
+        
+        .sidebar-footer a {
+            display: flex;
+            align-items: center;
+            gap: .6rem;
+            color: rgba(255, 255, 255, .5);
+            font-size: .85rem;
+            font-weight: 600;
+            transition: color .2s
+        }
+        
+        .sidebar-footer a:hover {
+            color: #fff
+        }
+        
+        .main {
+            margin-right: 260px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh
+        }
+        
+        .topbar {
+            background: var(--w);
+            border-bottom: 1px solid var(--mg);
+            padding: .9rem 1.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            gap: .5rem
+        }
+        
+        .topbar h1 {
+            font-size: 1.1rem;
+            font-weight: 900;
+            color: var(--td);
+            flex-shrink: 0
+        }
+        
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: .75rem;
+            flex-wrap: wrap;
+            justify-content: flex-end
+        }
+        
+        .sidebar-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.4rem;
+            color: var(--td);
+            cursor: pointer;
+            padding: .3rem;
+            border-radius: var(--rf)
+        }
+        
+        .sidebar-toggle:hover {
+            background: var(--og)
+        }
+        
+        .online-badge {
+            display: flex;
+            align-items: center;
+            gap: .4rem;
+            font-size: .8rem;
+            font-weight: 700;
+            padding: .3rem .8rem;
+            border-radius: var(--rf);
+            border: 1.5px solid var(--mg);
+            color: var(--tm)
+        }
+        
+        .online-badge.connected {
+            border-color: var(--ok);
+            color: var(--ok);
+            background: rgba(16, 185, 129, .07)
+        }
+        
+        .online-badge .dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: currentColor
+        }
+        
+        .content {
+            padding: 2rem 1.75rem;
+            flex: 1
+        }
+        /* Cards */
+        
+        .card {
+            background: var(--w);
+            border-radius: var(--r16);
+            border: 1px solid var(--mg);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem
+        }
+        
+        .card-title {
+            font-size: 1rem;
+            font-weight: 800;
+            color: var(--td);
+            margin-bottom: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: .6rem
+        }
+        
+        .card-title i {
+            color: var(--p);
+            font-size: 1.1rem
+        }
+        
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 1rem;
+            margin-bottom: 1.5rem
+        }
+        
+        .stat-card {
+            background: var(--w);
+            border-radius: var(--r16);
+            border: 1px solid var(--mg);
+            padding: 1.25rem;
+            text-align: center
+        }
+        
+        .stat-card .snum {
+            font-size: 1.8rem;
+            font-weight: 900;
+            color: var(--p);
+            display: block
+        }
+        
+        .stat-card .slbl {
+            font-size: .8rem;
+            color: var(--tm);
+            font-weight: 600
+        }
+        /* Tabs */
+        
+        .tabs {
+            display: flex;
+            gap: .5rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap
+        }
+        
+        .tab {
+            padding: .55rem 1.25rem;
+            border-radius: var(--rf);
+            font-weight: 700;
+            font-size: .88rem;
+            color: var(--tm);
+            border: 1.5px solid var(--mg);
+            background: var(--w);
+            transition: all .2s;
+            cursor: pointer
+        }
+        
+        .tab:hover {
+            color: var(--p);
+            border-color: var(--p)
+        }
+        
+        .tab.active {
+            background: var(--p);
+            color: #fff;
+            border-color: var(--p)
+        }
+        
+        .tab-panel {
+            display: none
+        }
+        
+        .tab-panel.active {
+            display: block
+        }
+        /* Forms */
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem
+        }
+        
+        .fg {
+            margin-bottom: 1rem
+        }
+        
+        .fg label {
+            display: block;
+            font-weight: 700;
+            font-size: .85rem;
+            color: var(--td);
+            margin-bottom: .4rem
+        }
+        
+        .fg input,
+        .fg textarea,
+        .fg select {
+            width: 100%;
+            padding: .7rem 1rem;
+            border: 1.5px solid var(--mg);
+            border-radius: var(--r8);
+            font-size: .92rem;
+            color: var(--td);
+            background: var(--og);
+            direction: rtl;
+            transition: border-color .2s
+        }
+        
+        .fg input:focus,
+        .fg textarea:focus,
+        .fg select:focus {
+            outline: none;
+            border-color: var(--p);
+            background: var(--w);
+            box-shadow: 0 0 0 3px rgba(26, 86, 219, .1)
+        }
+        
+        .fg textarea {
+            height: 90px;
+            resize: vertical
+        }
+        
+        .fg-full {
+            grid-column: 1/-1
+        }
+        /* Buttons */
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: .5rem;
+            padding: .65rem 1.5rem;
+            border-radius: var(--rf);
+            font-size: .92rem;
+            font-weight: 700;
+            transition: all .2s;
+            cursor: pointer;
+            font-family: var(--font)
+        }
+        
+        .btn-primary {
+            background: var(--p);
+            color: #fff;
+            border: none;
+            box-shadow: 0 4px 14px rgba(26, 86, 219, .3)
+        }
+        
+        .btn-primary:hover {
+            background: var(--pd);
+            transform: translateY(-1px)
+        }
+        
+        .btn-primary:disabled {
+            opacity: .5;
+            cursor: not-allowed;
+            transform: none
+        }
+        
+        .btn-outline {
+            background: transparent;
+            color: var(--p);
+            border: 1.5px solid var(--p)
+        }
+        
+        .btn-outline:hover {
+            background: var(--p);
+            color: #fff
+        }
+        
+        .btn-danger {
+            background: var(--err);
+            color: #fff;
+            border: none
+        }
+        
+        .btn-danger:hover {
+            background: #dc2626
+        }
+        
+        .btn-sm {
+            padding: .35rem .85rem;
+            font-size: .8rem
+        }
+        
+        .btn-ghost {
+            background: var(--lg);
+            color: var(--tm);
+            border: none
+        }
+        
+        .btn-ghost:hover {
+            background: var(--mg);
+            color: var(--td)
+        }
+        /* Upload zone */
+        
+        .upload-zone {
+            border: 2px dashed var(--mg);
+            border-radius: var(--r16);
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all .2s;
+            background: var(--og);
+            position: relative
+        }
+        
+        .upload-zone:hover,
+        .upload-zone.drag {
+            border-color: var(--p);
+            background: var(--al)
+        }
+        
+        .upload-zone input {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            cursor: pointer;
+            width: 100%;
+            height: 100%
+        }
+        
+        .upload-zone i {
+            font-size: 2rem;
+            color: var(--p);
+            display: block;
+            margin-bottom: .5rem
+        }
+        
+        .upload-zone p {
+            font-size: .88rem;
+            color: var(--tm);
+            font-weight: 600
+        }
+        
+        .upload-zone span {
+            font-size: .78rem;
+            color: var(--tl)
+        }
+        /* Image preview with position control */
+        
+        .img-preview-wrap {
+            position: relative;
+            border-radius: var(--r16);
+            overflow: hidden;
+            background: var(--mg)
+        }
+        
+        .img-preview-wrap img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            display: block;
+            transition: object-position .3s
+        }
+        
+        .img-remove {
+            position: absolute;
+            top: .5rem;
+            left: .5rem;
+            width: 30px;
+            height: 30px;
+            background: rgba(0, 0, 0, .6);
+            color: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: .85rem
+        }
+        
+        .pos-controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: .35rem;
+            margin-top: .6rem;
+            align-items: center
+        }
+        
+        .pos-label {
+            font-size: .78rem;
+            font-weight: 700;
+            color: var(--tm);
+            margin-left: .25rem
+        }
+        
+        .pos-btn {
+            padding: .28rem .7rem;
+            font-size: .75rem;
+            font-weight: 700;
+            border-radius: var(--rf);
+            border: 1.5px solid var(--mg);
+            background: var(--w);
+            color: var(--tm);
+            cursor: pointer;
+            transition: all .15s
+        }
+        
+        .pos-btn:hover {
+            border-color: var(--p);
+            color: var(--p)
+        }
+        
+        .pos-btn.active {
+            background: var(--p);
+            color: #fff;
+            border-color: var(--p)
+        }
+        /* Items list */
+        
+        .items-list {
+            display: flex;
+            flex-direction: column;
+            gap: .6rem;
+            max-height: 420px;
+            overflow-y: auto;
+            padding-right: .25rem
+        }
+        
+        .item-row {
+            background: var(--og);
+            border: 1px solid var(--mg);
+            border-radius: var(--r8);
+            padding: .75rem 1rem;
+            display: flex;
+            align-items: center;
+            gap: .75rem;
+            transition: border-color .2s
+        }
+        
+        .item-row:hover {
+            border-color: var(--p)
+        }
+        
+        .item-thumb {
+            width: 50px;
+            height: 50px;
+            border-radius: var(--r8);
+            object-fit: cover;
+            background: var(--lg);
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--tm);
+            font-size: 1.2rem;
+            overflow: hidden
+        }
+        
+        .item-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover
+        }
+        
+        .item-info {
+            flex: 1;
+            min-width: 0
+        }
+        
+        .item-info strong {
+            display: block;
+            font-size: .9rem;
+            font-weight: 700;
+            color: var(--td);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis
+        }
+        
+        .item-info span {
+            font-size: .78rem;
+            color: var(--tl)
+        }
+        
+        .item-actions {
+            display: flex;
+            gap: .4rem;
+            flex-shrink: 0
+        }
+        /* Leader edit card */
+        
+        .leader-card {
+            background: var(--og);
+            border-radius: var(--r16);
+            padding: 1.25rem;
+            border: 1.5px solid var(--mg)
+        }
+        
+        .leader-card-title {
+            font-size: .9rem;
+            font-weight: 800;
+            color: var(--td);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: .5rem
+        }
+        
+        .leader-card-title i {
+            color: var(--p)
+        }
+        
+        .leader-avatar-row {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem
+        }
+        
+        .leader-avatar {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--al);
+            background: var(--mg);
+            flex-shrink: 0
+        }
+        
+        .change-img-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: .4rem;
+            background: var(--lg);
+            color: var(--tm);
+            font-size: .8rem;
+            font-weight: 700;
+            padding: .35rem .85rem;
+            border-radius: var(--rf);
+            cursor: pointer;
+            transition: all .2s
+        }
+        
+        .change-img-btn:hover {
+            background: var(--al);
+            color: var(--p)
+        }
+        /* Alerts */
+        
+        .alert {
+            padding: .75rem 1rem;
+            border-radius: var(--r8);
+            font-size: .88rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: .5rem;
+            margin-bottom: 1rem
+        }
+        
+        .alert-success {
+            background: rgba(16, 185, 129, .1);
+            border: 1px solid var(--ok);
+            color: var(--ok)
+        }
+        
+        .alert-error {
+            background: rgba(239, 68, 68, .1);
+            border: 1px solid var(--err);
+            color: var(--err)
+        }
+        
+        .alert-info {
+            background: rgba(14, 165, 233, .1);
+            border: 1px solid var(--a);
+            color: var(--a)
+        }
+        /* Login screen */
+        
+        .login-wrap {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(145deg, #eef2fb, #dbeafe)
+        }
+        
+        .login-box {
+            background: var(--w);
+            border-radius: var(--r24);
+            padding: 2.5rem 2rem;
+            width: min(420px, 94vw);
+            box-shadow: 0 20px 60px rgba(26, 86, 219, .15)
+        }
+        
+        .login-logo {
+            text-align: center;
+            margin-bottom: 2rem
+        }
+        
+        .login-logo img {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+            margin: 0 auto .75rem;
+            border-radius: 50%;
+            background: var(--lg);
+            padding: 8px
+        }
+        
+        .login-logo h2 {
+            font-size: 1.2rem;
+            font-weight: 900;
+            color: var(--td)
+        }
+        
+        .login-logo p {
+            font-size: .85rem;
+            color: var(--tm)
+        }
+        
+        .login-err {
+            background: rgba(239, 68, 68, .1);
+            border: 1px solid var(--err);
+            color: var(--err);
+            padding: .65rem 1rem;
+            border-radius: var(--r8);
+            font-size: .85rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            display: none
+        }
+        /* Sync indicator */
+        
+        .sync-row {
+            display: flex;
+            align-items: center;
+            gap: .5rem;
+            font-size: .8rem;
+            color: var(--tl);
+            margin-top: .5rem
+        }
+        
+        .sync-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--tl)
+        }
+        
+        .sync-dot.syncing {
+            background: var(--a);
+            animation: pulse .8s infinite
+        }
+        
+        .sync-dot.ok {
+            background: var(--ok)
+        }
+        
+        .sync-dot.err {
+            background: var(--err)
+        }
+        
+        @keyframes pulse {
+            0%,
+            100% {
+                opacity: 1
+            }
+            50% {
+                opacity: .3
+            }
+        }
+        /* Switch toggle */
+        .switch{position:relative;display:inline-block;width:44px;height:24px;flex-shrink:0}
+        .switch input{opacity:0;width:0;height:0}
+        .slider{position:absolute;cursor:pointer;inset:0;background:var(--mg);transition:.3s;border-radius:24px}
+        .slider::before{content:'';position:absolute;height:18px;width:18px;left:3px;bottom:3px;background:#fff;transition:.3s;border-radius:50%}
+        input:checked+.slider{background:var(--p)}
+        input:checked+.slider::before{transform:translateX(20px)}
+        /* Responsive */
+        
+        @media(max-width:900px) {
+            .sidebar-toggle {
+                display: inline-flex
+            }
+            .sidebar {
+                transform: translateX(100%);
+                position: fixed;
+                z-index: 100;
+                top: 0;
+                right: 0;
+                height: 100vh;
+                width: 280px;
+                transition: transform .3s ease;
+                box-shadow: 0 0 30px rgba(0, 0, 0, .15)
+            }
+            .sidebar.open {
+                transform: none
+            }
+            .sidebar-overlay {
+                display: none;
+                position: fixed;
+                inset: 0;
+                z-index: 99;
+                background: rgba(0, 0, 0, .4)
+            }
+            .sidebar.open ~ .sidebar-overlay {
+                display: block
+            }
+            .main {
+                margin-right: 0
+            }
+            .stats-row {
+                grid-template-columns: 1fr 1fr
+            }
+            .form-grid {
+                grid-template-columns: 1fr
+            }
+            .vps-section {
+                grid-template-columns: 1fr !important
+            }
+            .topbar {
+                padding: .7rem .75rem
+            }
+            .topbar h1 {
+                font-size: .95rem
+            }
+            .topbar-right .btn .btn-text {
+                display: none
+            }
+            .content {
+                padding: 1rem
+            }
+        }
+        
+        @media(max-width:500px) {
+            .stats-row {
+                grid-template-columns: 1fr 1fr
+            }
+            .content {
+                padding: .75rem
+            }
+            .stat-card {
+                padding: .8rem
+            }
+            .stat-card .snum {
+                font-size: 1.3rem
+            }
+            .modal {
+                padding: 1.2rem
+            }
+            .login-box {
+                padding: 1.5rem;
+                margin: 1rem
+            }
+            .topbar-right .btn-text {
+                display: none
+            }
+        }
+        /* Modal */
+        
+        .modal-bg {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, .5);
+            z-index: 200;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            backdrop-filter: blur(4px)
+        }
+        
+        .modal {
+            background: var(--w);
+            border-radius: var(--r24);
+            width: min(520px, 100%);
+            max-height: 88vh;
+            overflow-y: auto;
+            padding: 2rem;
+            box-shadow: 0 24px 60px rgba(0, 0, 0, .25)
+        }
+        
+        .modal-title {
+            font-size: 1.05rem;
+            font-weight: 800;
+            color: var(--td);
+            margin-bottom: 1.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between
+        }
+        
+        .modal-close {
+            color: var(--tl);
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: color .2s
+        }
+        
+        .modal-close:hover {
+            color: var(--td)
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- LOGIN -->
+    <div class="login-wrap" id="loginWrap">
+        <div class="login-box">
+            <div class="login-logo">
+                <img src="logo-union.jpg" alt="شعار" />
+                <h2>لوحة الإدارة</h2>
+                <p>اتحاد شباب الوطن – الإسكندرية</p>
+            </div>
+            <div class="login-err" id="loginErr">خطأ في تسجيل الدخول</div>
+            <div class="fg">
+                <label>البريد الإلكتروني</label>
+                <input type="email" id="emailInput" placeholder="admin@example.com" onkeydown="if(event.key==='Enter')doLogin()" />
+            </div>
+            <div class="fg">
+                <label>كلمة المرور</label>
+                <input type="password" id="pwInput" placeholder="أدخل كلمة المرور..." onkeydown="if(event.key==='Enter')doLogin()" />
+            </div>
+            <button class="btn btn-primary" style="width:100%;justify-content:center;margin-top:.5rem" onclick="doLogin()">
+      <i class="fas fa-sign-in-alt"></i> دخول
+    </button>
+        </div>
+    </div>
+
+    <!-- DASHBOARD -->
+    <div class="layout" id="dashWrap" style="display:none">
+
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-logo">
+                <img src="logo-union.jpg" alt="شعار" />
+                <div class="sidebar-logo-text">
+                    <span class="t1">لوحة الإدارة</span>
+                    <span class="t2">اتحاد شباب الوطن</span>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <div class="nav-item active" onclick="showPage('overview')"><i class="fas fa-chart-pie"></i> نظرة عامة</div>
+                <div class="nav-item" onclick="showPage('news')"><i class="fas fa-newspaper"></i> الأخبار</div>
+                <div class="nav-item" onclick="showPage('committees')"><i class="fas fa-list"></i> اللجان</div>
+                <div class="nav-item" onclick="showPage('leaders')"><i class="fas fa-users"></i> القيادات</div>
+                <div class="nav-item" onclick="showPage('coordinator')"><i class="fas fa-star"></i> منسق المحافظة</div>
+                <div class="nav-item" onclick="showPage('union')"><i class="fas fa-crown"></i> قيادة الاتحاد</div>
+                <div class="nav-item" onclick="showPage('applications')"><i class="fas fa-clipboard-list"></i> الطلبات</div>
+                <div class="nav-item" onclick="showPage('admins')"><i class="fas fa-shield-alt"></i> إدارة الأدمنز</div>
+                <div class="nav-item" onclick="showPage('formsettings')"><i class="fas fa-toggle-on"></i> إعدادات التقديم</div>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="index.html" target="_blank"><i class="fas fa-external-link-alt"></i> عرض الموقع</a>
+                <button class="btn btn-danger btn-sm" onclick="doLogout()" style="width:100%;margin-top:.75rem;justify-content:center"><i class="fas fa-sign-out-alt"></i> تسجيل خروج</button>
+            </div>
+        </aside>
+
+        <!-- Sidebar overlay (mobile) -->
+        <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+        <!-- Main -->
+        <main class="main">
+            <div class="topbar">
+                <button class="sidebar-toggle" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+                <h1 id="pageTitle">نظرة عامة</h1>
+                <div class="topbar-right">
+                    <div class="online-badge" id="onlineBadge">
+                        <div class="dot"></div> <span id="onlineText">جاري الاتصال...</span>
+                    </div>
+                    <button class="btn btn-ghost btn-sm" onclick="syncNow()"><i class="fas fa-sync-alt"></i> <span class="btn-text">مزامنة</span></button>
+                    <button class="btn btn-danger btn-sm" onclick="doLogout()"><i class="fas fa-sign-out-alt"></i> <span class="btn-text">خروج</span></button>
+                </div>
+            </div>
+
+            <div class="content">
+
+                <!-- OVERVIEW PAGE -->
+                <div id="page-overview" class="tab-panel active">
+                    <div class="stats-row">
+                        <div class="stat-card"><span class="snum" id="st-news">0</span><span class="slbl">خبر منشور</span></div>
+                        <div class="stat-card"><span class="snum" id="st-comm">10</span><span class="slbl">لجنة</span></div>
+                        <div class="stat-card"><span class="snum" id="st-leaders">0</span><span class="slbl">قائد مُسجَّل</span></div>
+                        <div class="stat-card"><span class="snum" id="st-apps">0</span><span class="slbl">طلب انضمام</span></div>
+                        <div class="stat-card"><span class="snum" id="st-sync">—</span><span class="slbl">آخر مزامنة</span></div>
+                    </div>
+                    <div class="card">
+                        <div class="card-title"><i class="fas fa-chart-bar"></i> إحصائيات متقدمة</div>
+                        <div id="advancedStats" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:.75rem;margin-top:.75rem">
+                            <div class="stat-card"><span class="snum" id="st-week">0</span><span class="slbl">طلب هذا الأسبوع</span></div>
+                            <div class="stat-card"><span class="snum" id="st-month">0</span><span class="slbl">طلب هذا الشهر</span></div>
+                            <div class="stat-card"><span class="snum" id="st-admins">0</span><span class="slbl">مسؤول</span></div>
+                            <div class="stat-card"><span class="snum" id="st-logins">0</span><span class="slbl">دخول اليوم</span></div>
+                        </div>
+                        <div style="margin-top:1rem;font-size:.85rem;color:var(--tm)">
+                            <strong>الطلبات حسب اللجنة:</strong>
+                            <div id="appsByCommittee" style="margin-top:.4rem"></div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-title"><i class="fas fa-history"></i> آخر عمليات الدخول</div>
+                        <div id="loginLogs" style="margin-top:.5rem"></div>
+                    </div>
+                    <div class="card">
+                        <div class="card-title"><i class="fas fa-newspaper"></i> آخر الأخبار</div>
+                        <div id="overviewNews"></div>
+                    </div>
+                </div>
+
+                <!-- NEWS PAGE -->
+                <div id="page-news" class="tab-panel">
+                    <div class="card">
+                        <div class="card-title"><i class="fas fa-plus-circle"></i> إضافة خبر جديد</div>
+                        <div class="form-grid">
+                            <div class="fg fg-full">
+                                <label>عنوان الخبر *</label>
+                                <input type="text" id="nTitle" placeholder="عنوان الخبر..." />
+                            </div>
+                            <div class="fg fg-full">
+                                <label>تفاصيل الخبر *</label>
+                                <textarea id="nDesc" placeholder="اكتب تفاصيل الخبر هنا..."></textarea>
+                            </div>
+                            <div class="fg fg-full">
+                                <label>صورة الخبر (اختياري)</label>
+                                <div class="upload-zone" id="nUploadZone">
+                                    <input type="file" id="nImgFile" accept="image/*" onchange="handleNewsImg(event)" />
+                                    <i class="fas fa-cloud-upload-alt"></i>
+                                    <p>اسحب صورة أو اضغط للاختيار</p>
+                                    <span>PNG, JPG, WEBP — حجم مناسب للويب</span>
+                                </div>
+                                <div id="nImgPreview" style="display:none;margin-top:.75rem">
+                                    <div class="img-preview-wrap">
+                                        <img id="nPreviewImg" src="" alt="معاينة" />
+                                        <div class="img-remove" onclick="clearNewsImg()"><i class="fas fa-times"></i></div>
+                                    </div>
+                                    <div class="pos-controls">
+                                        <span class="pos-label">موضع الصورة:</span>
+                                        <button class="pos-btn" data-pos="top" onclick="setPos(this,'n')">أعلى</button>
+                                        <button class="pos-btn active" data-pos="center" onclick="setPos(this,'n')">وسط</button>
+                                        <button class="pos-btn" data-pos="bottom" onclick="setPos(this,'n')">أسفل</button>
+                                        <button class="pos-btn" data-pos="20% center" onclick="setPos(this,'n')">يمين</button>
+                                        <button class="pos-btn" data-pos="80% center" onclick="setPos(this,'n')">يسار</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="display:flex;gap:.75rem;align-items:center;margin-top:.5rem">
+                            <button class="btn btn-primary" id="publishBtn" onclick="publishNews()"><i class="fas fa-paper-plane"></i> نشر الخبر</button>
+                            <div class="sync-row" id="nSyncRow" style="display:none">
+                                <div class="sync-dot syncing" id="nSyncDot"></div>
+                                <span id="nSyncTxt">جاري الحفظ...</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-title"><i class="fas fa-list"></i> الأخبار الحالية</div>
+                        <div class="items-list" id="newsList"></div>
+                    </div>
+                </div>
+
+                <!-- COMMITTEES PAGE -->
+                <div id="page-committees" class="tab-panel">
+                    <div class="card">
+                        <div class="card-title"><i class="fas fa-list"></i> إدارة اللجان</div>
+                        <div style="display:flex;gap:.5rem;margin-bottom:1rem">
+                            <button class="btn btn-primary" onclick="openAddComm()"><i class="fas fa-plus"></i> إضافة لجنة جديدة</button>
+                        </div>
+                        <div class="items-list" id="committeesList"></div>
+                    </div>
+                </div>
+
+                <!-- LEADERS PAGE -->
+                <div id="page-leaders" class="tab-panel">
+                    <div class="card">
+                        <div class="card-title"><i class="fas fa-users"></i> قيادات اللجان</div>
+                        <div class="fg">
+                            <label>اختر اللجنة</label>
+                            <select id="leaderSelect" onchange="loadLeaderForm()">
+              <option value="">-- اختر لجنة --</option>
+            </select>
+                        </div>
+                        <div id="leaderForms"></div>
+
+          <div id="leaderGeneralReset" style="display:none;margin-top:.5rem">
+            <button class="btn btn-danger btn-sm" onclick="deleteLeaders()"><i class="fas fa-trash"></i> حذف قيادات هذه اللجنة</button>
+          </div>
+          <div id="leaderSaveRow" style="display:none;margin-top:1rem">
+            <button class="btn btn-primary" onclick="saveLeaders()"><i class="fas fa-save"></i> حفظ القيادات</button>
+            <button class="btn btn-danger" onclick="deleteLeaders()" style="margin-right:.5rem"><i class="fas fa-trash"></i> حذف القيادات</button>
+                            <div class="sync-row" id="lSyncRow" style="display:none;margin-top:.5rem">
+                                <div class="sync-dot syncing" id="lSyncDot"></div>
+                                <span id="lSyncTxt">جاري الحفظ...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- COORDINATOR PAGE -->
+                <div id="page-coordinator" class="tab-panel">
+                    <div class="card">
+                        <div class="card-title"><i class="fas fa-star"></i> منسق محافظة الإسكندرية ونائبه</div>
+                        <p style="color:var(--tm);font-size:.88rem;margin-bottom:1.5rem">هذا الكارت يظهر في أعلى صفحة القيادات بشكل مميز</p>
+                        <div class="form-grid">
+                            <!-- Coordinator -->
+                            <div class="leader-card">
+                                <div class="leader-card-title"><i class="fas fa-crown"></i> منسق المحافظة</div>
+                                <div class="leader-avatar-row">
+                                    <img class="leader-avatar" id="coordAvatar" src="https://ui-avatars.com/api/?name=منسق&background=1a56db&color=fff&size=200&bold=true" alt="" />
+                                    <div>
+                                        <label class="change-img-btn" for="coordImgFile"><i class="fas fa-camera"></i> تغيير الصورة</label>
+                                        <input type="file" id="coordImgFile" accept="image/*" style="display:none" onchange="handlePersonImg(event,'coord')" />
+                                        <input type="hidden" id="coordImgB64" />
+                                    </div>
+                                </div>
+                                <div class="fg"><label>الاسم الكامل</label><input type="text" id="coordName" placeholder="اسم المنسق..." /></div>
+                                <div class="fg"><label>المنصب</label><input type="text" id="coordRole" value="منسق محافظة الإسكندرية" /></div>
+                                <div class="fg"><label>نبذة مختصرة</label><input type="text" id="coordBio" placeholder="نبذة..." /></div>
+                            </div>
+                            <!-- VP Coordinator -->
+                            <div class="leader-card">
+                                <div class="leader-card-title"><i class="fas fa-user-shield"></i> نائب منسق المحافظة</div>
+                                <div class="leader-avatar-row">
+                                    <img class="leader-avatar" id="coordVpAvatar" src="https://ui-avatars.com/api/?name=نائب&background=0ea5e9&color=fff&size=200&bold=true" alt="" />
+                                    <div>
+                                        <label class="change-img-btn" for="coordVpImgFile"><i class="fas fa-camera"></i> تغيير الصورة</label>
+                                        <input type="file" id="coordVpImgFile" accept="image/*" style="display:none" onchange="handlePersonImg(event,'coordVp')" />
+                                        <input type="hidden" id="coordVpImgB64" />
+                                    </div>
+                                </div>
+                                <div class="fg"><label>الاسم الكامل</label><input type="text" id="coordVpName" placeholder="اسم النائب..." /></div>
+                                <div class="fg"><label>المنصب</label><input type="text" id="coordVpRole" value="نائب منسق محافظة الإسكندرية" /></div>
+                                <div class="fg"><label>نبذة مختصرة</label><input type="text" id="coordVpBio" placeholder="نبذة..." /></div>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary" style="margin-top:1rem" onclick="saveCoordinator()">
+            <i class="fas fa-save"></i> حفظ بيانات منسق المحافظة
+          </button>
+                        <div class="sync-row" id="cSyncRow" style="display:none;margin-top:.5rem">
+                            <div class="sync-dot syncing" id="cSyncDot"></div>
+                            <span id="cSyncTxt">جاري الحفظ...</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- UNION LEADERSHIP PAGE -->
+                <div id="page-union" class="tab-panel">
+                    <div class="card">
+                        <div class="card-title"><i class="fas fa-crown"></i> قيادة الاتحاد العامة</div>
+                        <p style="color:var(--tm);font-size:.88rem;margin-bottom:1.5rem">يظهر هذا الكارت في أعلى صفحة القيادات بشكل مميز</p>
+                        <div id="unionFormContainer">
+                            <div class="form-grid" style="margin-top:1rem" id="unionForms">
+                                <div class="leader-card" id="unionPresidentCard">
+                                    <div class="leader-card-title"><i class="fas fa-crown"></i> رئيس الاتحاد</div>
+                                    <div class="leader-avatar-row">
+                                        <img class="leader-avatar" id="unionPresAvatar" src="https://ui-avatars.com/api/?name=الرئيس&background=1a56db&color=fff&size=200&bold=true" alt=""/>
+                                        <div>
+                                            <label class="change-img-btn" for="unionPresImgFile"><i class="fas fa-camera"></i> تغيير الصورة</label>
+                                            <input type="file" id="unionPresImgFile" accept="image/*" style="display:none" onchange="handleUnionPresImg(event)"/>
+                                        </div>
+                                    </div>
+                                    <div class="fg"><label>الاسم الكامل</label><input type="text" id="unionPresName" placeholder="اسم رئيس الاتحاد..."/></div>
+                                    <div class="fg"><label>المنصب</label><input type="text" id="unionPresRole" value="رئيس الاتحاد"/></div>
+                                    <div class="fg"><label>نبذة مختصرة</label><input type="text" id="unionPresBio" placeholder="نبذة..."/></div>
+                                </div>
+                                <div class="vps-section" style="grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr;gap:1rem" id="unionVpsContainer">
+                                    <div style="grid-column:1/-1"><div class="leader-card-title"><i class="fas fa-user-shield"></i> نواب رئيس الاتحاد</div></div>
+                                    <div id="unionVpsList"></div>
+                                    <div style="grid-column:1/-1;margin-top:.25rem">
+                                        <button class="btn btn-outline btn-sm" onclick="addUnionVp()"><i class="fas fa-plus"></i> إضافة نائب</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="unionSaveRow" style="display:none;margin-top:1rem">
+                            <button class="btn btn-primary" onclick="saveUnion()"><i class="fas fa-save"></i> حفظ قيادة الاتحاد</button>
+                            <button class="btn btn-danger" onclick="deleteUnion()" style="margin-right:.5rem"><i class="fas fa-trash"></i> حذف الكل</button>
+                            <div class="sync-row" id="uSyncRow" style="display:none;margin-top:.5rem">
+                                <div class="sync-dot syncing" id="uSyncDot"></div>
+                                <span id="uSyncTxt">جاري الحفظ...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- APPLICATIONS PAGE -->
+                <div id="page-applications" class="tab-panel">
+                    <div class="card">
+                        <div class="card-title"><i class="fas fa-clipboard-list"></i> طلبات الانضمام</div>
+                        <div style="display:flex;gap:.5rem;margin-bottom:.75rem;flex-wrap:wrap">
+                            <button class="btn btn-outline btn-sm" onclick="loadApplications()"><i class="fas fa-sync"></i> تحديث</button>
+                            <button class="btn btn-outline btn-sm" id="sortAppsBtn" onclick="toggleAppsSort()"><i class="fas fa-sort-amount-down"></i></button>
+                            <select id="appsFilterSelect" onchange="setAppsFilter(parseFloat(this.value)||0)" style="padding:.35rem .6rem;border-radius:6px;border:1px solid var(--mg);font-size:.85rem;background:var(--w)">
+                                <option value="0">📋 الكل</option>
+                                <option value="12">⏳ آخر 12 ساعة</option>
+                                <option value="24">📅 آخر يوم</option>
+                                <option value="168">📆 آخر أسبوع</option>
+                                <option value="720">🗓️ آخر شهر</option>
+                            </select>
+                            <button class="btn btn-danger btn-sm" onclick="deleteAllApplications()" style="margin-right:auto"><i class="fas fa-trash"></i> حذف الكل</button>
+                            <button class="btn btn-outline btn-sm" onclick="exportApplicationsAll()"><i class="fas fa-file-excel"></i> إكسيل الكل</button>
+                            <button class="btn btn-outline btn-sm" onclick="exportApplicationsPerCommittee()"><i class="fas fa-folder-open"></i> إكسيل كل لجنة</button>
+                            <button class="btn btn-outline btn-sm" onclick="printApplications('all')"><i class="fas fa-file-pdf"></i> PDF شامل</button>
+                            <button class="btn btn-outline btn-sm" onclick="toggleApplicationsReport()"><i class="fas fa-table"></i> تقرير شامل</button>
+                        </div>
+                        <div style="display:flex;gap:.5rem;align-items:center;margin-bottom:.75rem;flex-wrap:wrap;padding:.6rem .8rem;background:var(--og);border-radius:8px;border:1px solid var(--mg)">
+                            <span style="font-size:.85rem;font-weight:700;color:var(--tm);white-space:nowrap"><i class="fas fa-filter"></i> لجنة محددة:</span>
+                            <select id="exportCommitteeSelect" style="padding:.35rem .6rem;border-radius:6px;border:1px solid var(--mg);font-size:.85rem;background:var(--w);min-width:160px">
+                                <option value="">-- اختر اللجنة --</option>
+                            </select>
+                            <button class="btn btn-primary btn-sm" onclick="exportApplicationsByCommittee()" id="exportCommBtn" disabled><i class="fas fa-file-excel"></i> إكسيل</button>
+                            <button class="btn btn-outline btn-sm" onclick="var s=document.getElementById('exportCommitteeSelect');if(s.value)printApplications(s.value)" id="printCommBtn" disabled><i class="fas fa-file-pdf"></i> PDF</button>
+                            <button class="btn btn-outline btn-sm" onclick="reportApplicationsByCommittee()" id="reportCommBtn" disabled><i class="fas fa-table"></i> تقرير</button>
+                        </div>
+                        <div id="committeeReport" style="display:none;margin-bottom:1rem;overflow-x:auto"></div>
+                        <div id="applicationsReport" style="display:none;margin-bottom:1rem;overflow-x:auto"></div>
+                        <div id="applicationsList"></div>
+                    </div>
+                </div>
+
+                <!-- ADMINS PAGE -->
+                <div id="page-admins" class="tab-panel">
+                    <div class="card">
+                        <div class="card-title"><i class="fas fa-shield-alt"></i> إدارة الأدمنز</div>
+                        <div style="display:flex;gap:.5rem;margin-bottom:1rem">
+                            <button class="btn btn-outline btn-sm" onclick="loadAdmins()"><i class="fas fa-sync"></i> تحديث</button>
+                        </div>
+                        <div id="adminsList"></div>
+                    </div>
+                </div>
+
+                <!-- FORM SETTINGS PAGE -->
+                <div id="page-formsettings" class="tab-panel">
+                    <div class="card">
+                        <div class="card-title"><i class="fas fa-toggle-on"></i> إعدادات التقديم</div>
+                        <div style="display:flex;flex-direction:column;gap:1.25rem">
+                            <div class="fg" style="display:flex;align-items:center;gap:1rem">
+                                <label style="margin:0;font-size:.95rem">حالة التقديم</label>
+                                <label class="switch">
+                                    <input type="checkbox" id="formOpenToggle" onchange="saveFormSettings()"/>
+                                    <span class="slider"></span>
+                                </label>
+                                <span id="formStatusText" style="font-weight:700;font-size:.9rem"></span>
+                            </div>
+                            <div class="fg">
+                                <label>رسالة عند غلق التقديم (تظهر للزائر)</label>
+                                <textarea id="formCloseMsg" rows="2" placeholder="سيتم فتح التقديم قريباً..." style="resize:vertical"></textarea>
+                            </div>
+                            <div class="fg" style="display:flex;align-items:center;gap:1rem">
+                                <label style="margin:0;font-size:.95rem">جدولة تلقائية</label>
+                                <label class="switch">
+                                    <input type="checkbox" id="formScheduleToggle" onchange="toggleSchedule()"/>
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                            <div id="scheduleFields" style="display:none">
+                                <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem">
+                                    <div class="fg">
+                                        <label>فتح التقديم من</label>
+                                        <input type="datetime-local" id="formOpenAt"/>
+                                    </div>
+                                    <div class="fg">
+                                        <label>إلى</label>
+                                        <input type="datetime-local" id="formCloseAt"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <button class="btn btn-primary btn-sm" onclick="saveFormSettings()"><i class="fas fa-save"></i> حفظ الإعدادات</button>
+                                <span id="formSettingsMsg" style="margin-right:1rem;font-weight:700;font-size:.85rem"></span>
+                            </div>
+                            <div style="padding:1rem;background:var(--al);border-radius:8px;font-size:.88rem;color:var(--tm)">
+                                <i class="fas fa-info-circle"></i> ملاحظة: إذا كانت الجدولة مفعلة، التقديم هيفتح ويقفل تلقائياً حسب الوقت المحدد. إذا لم تكن مفعلة، يتم التحكم يدوياً من التبديل أعلاه.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- /content -->
+        </main>
+    </div>
+    <!-- /layout -->
+
+    <!-- APPLICATION DETAIL MODAL -->
+    <div class="modal-bg" id="appDetailModal" style="display:none">
+        <div class="modal">
+            <div class="modal-title">
+                تفاصيل الطلب
+                <span class="modal-close" onclick="closeModal('appDetailModal')"><i class="fas fa-times"></i></span>
+            </div>
+            <div id="appDetailBody" style="line-height:2;font-size:.92rem"></div>
+            <div style="margin-top:1rem">
+                <button class="btn btn-danger" onclick="deleteApplication()"><i class="fas fa-trash"></i> حذف الطلب</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- EDIT NEWS MODAL -->
+    <div class="modal-bg" id="editNewsModal" style="display:none">
+        <div class="modal">
+            <div class="modal-title">
+                تعديل الخبر
+                <span class="modal-close" onclick="closeModal('editNewsModal')"><i class="fas fa-times"></i></span>
+            </div>
+            <input type="hidden" id="editNewsId" />
+            <div class="fg"><label>العنوان</label><input type="text" id="editNTitle" /></div>
+            <div class="fg"><label>التفاصيل</label><textarea id="editNDesc"></textarea></div>
+            <div class="fg">
+                <label>صورة جديدة</label>
+                <div class="upload-zone"><input type="file" id="editNImgFile" accept="image/*" onchange="handleEditImg(event)" />
+                    <i class="fas fa-image"></i>
+                    <p>اضغط لتغيير الصورة</p>
+                </div>
+                <div id="editNImgPreview" style="display:none;margin-top:.75rem">
+                    <div class="img-preview-wrap">
+                        <img id="editNPreview" src="" alt="" />
+                        <div class="img-remove" onclick="clearEditImg()"><i class="fas fa-times"></i></div>
+                    </div>
+                    <div class="pos-controls">
+                        <span class="pos-label">موضع الصورة:</span>
+                        <button class="pos-btn" data-pos="top" onclick="setPos(this,'edit')">أعلى</button>
+                        <button class="pos-btn active" data-pos="center" onclick="setPos(this,'edit')">وسط</button>
+                        <button class="pos-btn" data-pos="bottom" onclick="setPos(this,'edit')">أسفل</button>
+                        <button class="pos-btn" data-pos="20% center" onclick="setPos(this,'edit')">يمين</button>
+                        <button class="pos-btn" data-pos="80% center" onclick="setPos(this,'edit')">يسار</button>
+                    </div>
+                </div>
+            </div>
+            <div style="display:flex;gap:.75rem;margin-top:1rem">
+                <button class="btn btn-primary" style="flex:1" onclick="saveEditNews()"><i class="fas fa-save"></i> حفظ</button>
+                <button class="btn btn-ghost" style="flex:1" onclick="closeModal('editNewsModal')">إلغاء</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ADD COMMITTEE MODAL -->
+    <div class="modal-bg" id="addCommModal" style="display:none">
+        <div class="modal">
+            <div class="modal-title">
+                إضافة لجنة جديدة
+                <span class="modal-close" onclick="closeModal('addCommModal')"><i class="fas fa-times"></i></span>
+            </div>
+            <div class="fg"><label>اسم اللجنة</label><input type="text" id="addCommName" placeholder="مثال: العلاقات العامة"/></div>
+            <div class="fg"><label>الأيقونة (Font Awesome)</label><input type="text" id="addCommIcon" value="fas fa-circle" placeholder="fas fa-handshake"/></div>
+            <div class="fg"><label>الوصف المختصر</label><input type="text" id="addCommShort" placeholder="وصف مختصر..."/></div>
+            <div class="fg"><label>الوصف التفصيلي</label><textarea id="addCommFull" style="height:140px" placeholder="وصف تفصيلي للجنة..."></textarea></div>
+            <div style="display:flex;gap:.75rem;margin-top:1rem">
+                <button class="btn btn-primary" style="flex:1" onclick="saveAddComm()"><i class="fas fa-save"></i> حفظ</button>
+                <button class="btn btn-ghost" style="flex:1" onclick="closeModal('addCommModal')">إلغاء</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- EDIT COMMITTEE MODAL -->
+    <div class="modal-bg" id="editCommModal" style="display:none">
+        <div class="modal">
+            <div class="modal-title">
+                تعديل اللجنة
+                <span class="modal-close" onclick="closeModal('editCommModal')"><i class="fas fa-times"></i></span>
+            </div>
+            <input type="hidden" id="editCommId" />
+            <div class="fg"><label>اسم اللجنة</label><input type="text" id="editCommName" /></div>
+            <div class="fg"><label>الأيقونة (Font Awesome)</label><input type="text" id="editCommIcon" placeholder="fas fa-handshake"/></div>
+            <div class="fg"><label>الوصف المختصر</label><input type="text" id="editCommShort" /></div>
+            <div class="fg"><label>الوصف التفصيلي</label><textarea id="editCommFull" style="height:140px"></textarea></div>
+            <div style="display:flex;gap:.75rem;margin-top:1rem">
+                <button class="btn btn-primary" style="flex:1" onclick="saveEditComm()"><i class="fas fa-save"></i> حفظ</button>
+                <button class="btn btn-ghost" style="flex:1" onclick="closeModal('editCommModal')">إلغاء</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        'use strict';
+
+        /* ============================================================
+           admin.html – لوحة إدارة اتحاد شباب الوطن (Supabase)
+           ============================================================ */
+
+        try {
+            supabaseClient = initSupabase();
+        } catch (e) {
+            console.warn('Supabase init failed:', e);
+        }
+
+        /* ─── State ─── */
+        let DB = {
+            news: [],
+            committees: [],
+            leaders: {},
+            coordinator: {
+                president: {},
+                vp: {}
+            },
+        };
+        let newsImgB64 = '',
+            newsImgPos = 'center';
+        let editImgB64 = '',
+            editImgPos = 'center',
+            editImgRemoved = false;
+        let currentLeaderCommId = '';
+        let leaderImgMap = {};
+        let currentAppId = null;
+        let adminRole = 'hr';
+        let adminEmail = '';
+
+        /* ─── AUTH (Supabase Auth with Email/Password) ─── */
+        function translateAuthError(msg) {
+            if (msg.includes('Invalid login credentials')) return '❌ البريد الإلكتروني أو كلمة المرور غير صحيحة';
+            if (msg.includes('Email not confirmed')) return '📧 البريد الإلكتروني لم يتم تأكيده بعد';
+            if (msg.includes('User not found')) return '❌ لا يوجد حساب بهذا البريد الإلكتروني';
+            if (msg.includes('rate limit')) return '⏳ حاول مرة أخرى بعد قليل - تم تجاوز حد المحاولات';
+            if (msg.includes('network')) return '🌐 مشكلة في الاتصال - تحقق من الإنترنت';
+            return '❌ ' + msg;
+        }
+
+        async function doLogin() {
+            const email = document.getElementById('emailInput').value.trim();
+            const pwd = document.getElementById('pwInput').value;
+            if (!email || !pwd) {
+                showLoginErr('يرجى إدخال البريد الإلكتروني وكلمة المرور');
+                return;
+            }
+            try {
+                const {
+                    error
+                } = await supabaseClient.auth.signInWithPassword({
+                    email: email,
+                    password: pwd
+                });
+                if (error) {
+                    showLoginErr(translateAuthError(error.message));
+                    return;
+                }
+                sessionStorage.setItem('watan_auth', '1');
+                await checkAdminRole();
+                logLogin();
+                document.getElementById('loginWrap').style.display = 'none';
+                document.getElementById('dashWrap').style.display = 'flex';
+                await loadFromSupabase();
+                renderAll();
+            } catch (e) {
+                showLoginErr('🌐 خطأ في الاتصال بالخادم');
+            }
+        }
+
+        async function checkAdminRole() {
+            try {
+                const { data: { user } } = await supabaseClient.auth.getUser();
+                if (!user || !user.email) { adminRole = 'hr'; adminEmail = ''; return; }
+                adminEmail = user.email;
+                const { data } = await supabaseClient.from('admin_roles').select('role').eq('email', user.email).single();
+                adminRole = (data && data.role) || 'hr';
+            } catch (_) { adminRole = 'hr'; adminEmail = ''; }
+        }
+
+        async function logLogin() {
+            if (!adminEmail || !adminRole) return;
+            try {
+                await supabaseClient.from('login_log').insert({ email: adminEmail, role: adminRole });
+            } catch (_) {}
+        }
+
+        function showLoginErr(msg) {
+            const e = document.getElementById('loginErr');
+            e.textContent = msg;
+            e.style.display = 'flex';
+            setTimeout(() => e.style.display = 'none', 4000);
+        }
+
+        async function doLogout() {
+            await supabaseClient.auth.signOut();
+            sessionStorage.removeItem('watan_auth');
+            location.reload();
+        }
+
+        document.getElementById('pwInput').addEventListener('keydown', e => {
+            if (e.key === 'Enter') doLogin();
+        });
+        document.getElementById('emailInput').addEventListener('keydown', e => {
+            if (e.key === 'Enter') doLogin();
+        });
+
+        (async() => {
+            if (sessionStorage.getItem('watan_auth') === '1' && supabaseClient) {
+                const { data: { session } } = await supabaseClient.auth.getSession();
+                if (session) {
+                    await checkAdminRole();
+                    logLogin();
+                    document.getElementById('loginWrap').style.display = 'none';
+                    document.getElementById('dashWrap').style.display = 'flex';
+                    await loadFromSupabase();
+                    renderAll();
+                } else {
+                    sessionStorage.removeItem('watan_auth');
+                }
+            }
+        })();
+
+        /* ─── Supabase API ─── */
+        function setBadge(ok, txt) {
+            const b = document.getElementById('onlineBadge');
+            const t = document.getElementById('onlineText');
+            b.className = 'online-badge' + (ok ? ' connected' : '');
+            t.textContent = txt;
+        }
+
+        async function loadFromSupabase() {
+            if (!supabaseClient) {
+                DB = {
+                    committees: DEFAULT_COMMITTEES,
+                    leaders: {},
+                    news: DEFAULT_NEWS,
+                    coordinator: { president: {}, vp: {} }
+                };
+                setBadge(false, 'غير متصل');
+                return;
+            }
+            try {
+                setBadge(false, 'جاري الاتصال...');
+                const [committeesRes, newsRes, leadersRes, coordRes] = await Promise.all([
+                    supabaseClient.from('committees').select('*').order('id'),
+                    supabaseClient.from('news').select('*').order('created_at', {
+                        ascending: false
+                    }),
+                    supabaseClient.from('leaders').select('*'),
+                    supabaseClient.from('coordinator').select('*')
+                ]);
+
+                if (committeesRes.error) throw committeesRes.error;
+                if (newsRes.error) throw newsRes.error;
+                if (leadersRes.error) throw leadersRes.error;
+                if (coordRes.error) throw coordRes.error;
+
+                const leadersMap = {};
+                (leadersRes.data || []).forEach(l => {
+                    if (!leadersMap[l.committee_id]) leadersMap[l.committee_id] = { president: { name: '', role: '', img: '', bio: '' }, vps: [] };
+                    if (l.type === 'president') {
+                        leadersMap[l.committee_id].president = { name: l.name, role: l.role, img: l.img, bio: l.bio };
+                    } else if (l.type === 'vp') {
+                        leadersMap[l.committee_id].vps.push({ name: l.name, role: l.role, img: l.img, bio: l.bio });
+                    }
+                });
+
+                const coord = {
+                    president: {},
+                    vp: {}
+                };
+                (coordRes.data || []).forEach(c => {
+                    coord[c.type] = {
+                        name: c.name,
+                        role: c.role,
+                        img: c.img,
+                        bio: c.bio
+                    };
+                });
+
+                DB = {
+                    committees: mergeCommittees(committeesRes.data),
+                    news: (newsRes.data && newsRes.data.length) ? newsRes.data : DEFAULT_NEWS,
+                    leaders: leadersMap,
+                    coordinator: coord
+                };
+                lsSet('watan_db', DB);
+                setBadge(true, 'متصل • Supabase');
+                updateSyncTime();
+                updateAppsCount();
+                renderAdvancedStats();
+            } catch (e) {
+                setBadge(false, 'خطأ في الاتصال');
+                const cached = lsGet('watan_db', null);
+                if (cached) {
+                    DB = cached;
+                } else {
+                    DB = {
+                        committees: DEFAULT_COMMITTEES,
+                        leaders: {},
+                        news: DEFAULT_NEWS,
+                        coordinator: { president: {}, vp: {} }
+                    };
+                }
+            }
+        }
+
+        async function saveNewsToSupabase(item) {
+            const {
+                error
+            } = await supabaseClient.from('news').upsert(item, {
+                onConflict: 'id'
+            });
+            if (error) throw error;
+        }
+
+        async function deleteNewsFromSupabase(id) {
+            const {
+                error
+            } = await supabaseClient.from('news').delete().eq('id', id);
+            if (error) throw error;
+        }
+
+        async function saveCommitteeToSupabase(item) {
+            const {
+                error
+            } = await supabaseClient.from('committees').upsert(item, {
+                onConflict: 'id'
+            });
+            if (error) throw error;
+        }
+
+        async function saveLeadersToSupabase(committeeId, president, vps) {
+            // نمسح بس النواب عشان ما نأثرش ع الرئـيس
+            const { error: delVps } = await supabaseClient.from('leaders').delete().eq('committee_id', committeeId).eq('type', 'vp');
+            if (delVps) throw delVps;
+
+            // نمسح الرئيس القديم وندرج الجديد
+            await supabaseClient.from('leaders').delete().eq('committee_id', committeeId).eq('type', 'president');
+
+            if (president && president.name) {
+                const { error } = await supabaseClient.from('leaders').insert({
+                    committee_id: committeeId, type: 'president', ...president
+                });
+                if (error) throw error;
+            }
+            for (const vp of (vps || [])) {
+                if (vp && vp.name) {
+                    const { error } = await supabaseClient.from('leaders').insert({
+                        committee_id: committeeId, type: 'vp', ...vp
+                    });
+                    if (error) throw error;
+                }
+            }
+        }
+
+        /* ─── Form Settings ─── */
+        var formSettings = { form_open: true, form_message: '', schedule_enabled: false, form_open_at: '', form_close_at: '' };
+
+        async function loadFormSettings() {
+            try {
+                const { data, error } = await supabaseClient.from('app_settings').select('*').eq('id', 'form').single();
+                if (error && error.code !== 'PGRST116') throw error;
+                if (data) formSettings = data;
+            } catch (e) {
+                console.warn('Failed to load form settings:', e);
+            }
+            document.getElementById('formOpenToggle').checked = formSettings.form_open;
+            document.getElementById('formCloseMsg').value = formSettings.form_message || '';
+            document.getElementById('formScheduleToggle').checked = formSettings.schedule_enabled || false;
+            document.getElementById('formOpenAt').value = formSettings.form_open_at ? formSettings.form_open_at.slice(0, 16) : '';
+            document.getElementById('formCloseAt').value = formSettings.form_close_at ? formSettings.form_close_at.slice(0, 16) : '';
+            document.getElementById('scheduleFields').style.display = formSettings.schedule_enabled ? 'block' : 'none';
+            updateFormStatusText();
+        }
+
+        function toggleSchedule() {
+            document.getElementById('scheduleFields').style.display = document.getElementById('formScheduleToggle').checked ? 'block' : 'none';
+        }
+
+        function updateFormStatusText() {
+            const el = document.getElementById('formStatusText');
+            const isOpen = document.getElementById('formOpenToggle').checked;
+            el.textContent = isOpen ? '🟢 مفتوح' : '🔴 مغلق';
+            el.style.color = isOpen ? 'var(--success, #10b981)' : 'var(--danger, #ef4444)';
+        }
+
+        async function saveFormSettings() {
+            const msg = document.getElementById('formSettingsMsg');
+            msg.textContent = '';
+            const payload = {
+                id: 'form',
+                form_open: document.getElementById('formOpenToggle').checked,
+                form_message: document.getElementById('formCloseMsg').value.trim(),
+                schedule_enabled: document.getElementById('formScheduleToggle').checked,
+                form_open_at: document.getElementById('formOpenAt').value ? new Date(document.getElementById('formOpenAt').value).toISOString() : null,
+                form_close_at: document.getElementById('formCloseAt').value ? new Date(document.getElementById('formCloseAt').value).toISOString() : null
+            };
+            try {
+                const { error } = await supabaseClient.from('app_settings').upsert(payload, { onConflict: 'id' });
+                if (error) throw error;
+                formSettings = payload;
+                updateFormStatusText();
+                msg.textContent = '✅ تم الحفظ';
+                msg.style.color = 'var(--success, #10b981)';
+                setTimeout(() => msg.textContent = '', 3000);
+            } catch (e) {
+                msg.textContent = '❌ ' + (e.message || e);
+                msg.style.color = 'var(--danger, #ef4444)';
+            }
+        }
+
+        async function saveCoordinatorToSupabase(president, vp) {
+            const entries = [];
+            if (president) entries.push({
+                type: 'president',
+                ...president
+            });
+            if (vp) entries.push({
+                type: 'vp',
+                ...vp
+            });
+            for (const entry of entries) {
+                const {
+                    error
+                } = await supabaseClient.from('coordinator').upsert(entry, {
+                    onConflict: 'type'
+                });
+                if (error) throw error;
+            }
+        }
+
+        async function syncNow() {
+            await loadFromSupabase();
+            renderAll();
+            toast('تمت المزامنة', 'ok');
+        }
+
+        function updateSyncTime() {
+            const now = new Date();
+            document.getElementById('st-sync').textContent = `${now.getHours()}:${String(now.getMinutes()).padStart(2, '0')}`;
+        }
+
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('open');
+        }
+
+        /* ─── Navigation ─── */
+        const ADMIN_PAGES = {
+            overview: 'admin',
+            news: 'news',
+            committees: 'admin',
+            leaders: 'admin',
+            coordinator: 'admin',
+            union: 'admin',
+            applications: 'hr',
+            admins: 'admin',
+            formsettings: 'admin'
+        };
+
+        function showPage(name) {
+            const required = ADMIN_PAGES[name] || 'admin';
+            if (required === 'admin' && adminRole !== 'admin') {
+                toast('❌ لا تملك صلاحية الوصول لهذه الصفحة', 'err');
+                return;
+            }
+            document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+            document.getElementById('page-' + name).classList.add('active');
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            try { if (event && event.currentTarget) event.currentTarget.classList.add('active'); } catch(_) {}
+            document.getElementById('sidebar').classList.remove('open');
+            const titles = {
+                overview: 'نظرة عامة',
+                news: 'الأخبار',
+                committees: 'اللجان',
+                leaders: 'القيادات',
+                coordinator: 'منسق المحافظة',
+                union: 'قيادة الاتحاد',
+                applications: 'الطلبات',
+                admins: 'إدارة الأدمنز',
+                formsettings: 'إعدادات التقديم'
+            };
+            document.getElementById('pageTitle').textContent = titles[name] || name;
+            if (name === 'news') renderNewsList();
+            if (name === 'committees') renderCommList();
+            if (name === 'leaders') renderLeaderSelect();
+            if (name === 'coordinator') loadCoordinatorForm();
+            if (name === 'union') loadUnionForm();
+            if (name === 'applications') loadApplications();
+            if (name === 'admins') loadAdmins();
+            if (name === 'formsettings') loadFormSettings();
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).style.display = 'none';
+        }
+
+        /* ─── Render all ─── */
+        function syncNavPermissions() {
+            document.querySelectorAll('.nav-item').forEach(el => {
+                const m = el.getAttribute('onclick') ? el.getAttribute('onclick').match(/'([^']+)'/) : null;
+                const page = m ? m[1] : null;
+                const required = ADMIN_PAGES[page] || 'admin';
+                el.style.display = (required === 'admin' && adminRole !== 'admin') ? 'none' : 'flex';
+            });
+            if (adminRole !== 'admin') {
+                showPage('applications');
+            }
+        }
+
+        function populateExportCommitteeSelect() {
+            const sel = document.getElementById('exportCommitteeSelect');
+            if (!sel) return;
+            const val = sel.value;
+            sel.innerHTML = '<option value="">-- اختر اللجنة --</option><option value="general">قيادة الاتحاد</option>';
+            DB.committees.forEach(c => { sel.innerHTML += `<option value="${esc(c.id)}">${esc(c.name)}</option>`; });
+            sel.value = val;
+            sel.onchange = () => { const d = !sel.value; document.getElementById('exportCommBtn').disabled = d; document.getElementById('reportCommBtn').disabled = d; document.getElementById('printCommBtn').disabled = d; };
+        }
+
+        function renderAll() {
+            updateStats();
+            updateAppsCount();
+            renderOverviewNews();
+            renderAdvancedStats();
+            renderNewsList();
+            renderCommList();
+            populateExportCommitteeSelect();
+            renderLeaderSelect();
+            loadCoordinatorForm();
+            loadUnionForm();
+            syncNavPermissions();
+        }
+
+        function updateStats() {
+            document.getElementById('st-news').textContent = DB.news.length;
+            const leaderCount = Object.values(DB.leaders).reduce((a, l) => {
+                let c = l.president && l.president.name ? 1 : 0;
+                if (l.vps) c += l.vps.filter(v => v.name).length;
+                return a + c;
+            }, 0);
+            document.getElementById('st-leaders').textContent = leaderCount;
+        }
+
+        async function renderAdvancedStats() {
+            try {
+                const now = new Date();
+                const weekAgo = new Date(now.getTime() - 7*24*60*60*1000).toISOString();
+                const monthStart = new Date(now.getFullYear(), now.getMonth(), 1).toISOString();
+                const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate()).toISOString();
+
+                const [weekRes, monthRes, adminRes, todayRes, appsRes] = await Promise.all([
+                    supabaseClient.from('applications').select('id', { count:'exact',head:true }).gte('created_at', weekAgo),
+                    supabaseClient.from('applications').select('id', { count:'exact',head:true }).gte('created_at', monthStart),
+                    supabaseClient.from('admin_roles').select('id', { count:'exact',head:true }),
+                    supabaseClient.from('login_log').select('id', { count:'exact',head:true }).gte('created_at', todayStart),
+                    supabaseClient.from('applications').select('committee_id,national_id')
+                ]);
+
+                document.getElementById('st-week').textContent = weekRes.count || 0;
+                document.getElementById('st-month').textContent = monthRes.count || 0;
+                document.getElementById('st-admins').textContent = adminRes.count || 0;
+                document.getElementById('st-logins').textContent = todayRes.count || 0;
+
+                if (appsRes.data) {
+                    const byComm = {};
+                    appsRes.data.forEach(a => {
+                        const name = a.committee_id === 'general' ? 'قيادة الاتحاد' : (DB.committees.find(c => c.id === a.committee_id)?.name || a.committee_id);
+                        if (!byComm[name]) byComm[name] = { total: 0, ذكر: 0, أنثى: 0 };
+                        byComm[name].total++;
+                        const gender = getGenderFromNationalID(a.national_id);
+                        if (byComm[name][gender] !== undefined) byComm[name][gender]++;
+                    });
+                    const entries = Object.entries(byComm).sort((a,b) => b[1].total - a[1].total);
+                    const max = entries.length ? Math.max(...entries.map(([,v]) => v.total)) : 1;
+                    const html = entries.map(([k, v]) =>
+                        `<div style="margin-bottom:.6rem">
+                            <div style="display:flex;justify-content:space-between;font-size:.82rem;margin-bottom:.2rem">
+                                <strong>${esc(k)}</strong>
+                                <span>${v.total}</span>
+                            </div>
+                            <div style="display:flex;gap:2px;height:22px;border-radius:4px;overflow:hidden;background:var(--mg)">
+                                <div style="width:${v.ذكر/max*100}%;background:#3b82f6;transition:width .4s;display:flex;align-items:center;justify-content:center;font-size:.65rem;color:#fff;font-weight:700;min-width:${v.ذكر>0?'20px':'0'}">${v.ذكر||''}</div>
+                                <div style="width:${v.أنثى/max*100}%;background:#ec4899;transition:width .4s;display:flex;align-items:center;justify-content:center;font-size:.65rem;color:#fff;font-weight:700;min-width:${v.أنثى>0?'20px':'0'}">${v.أنثى||''}</div>
+                            </div>
+                            <div style="display:flex;gap:.75rem;font-size:.7rem;color:var(--tm)">
+                                <span><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:#3b82f6;vertical-align:middle"></span> ذكر: ${v.ذكر}</span>
+                                <span><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:#ec4899;vertical-align:middle"></span> أنثى: ${v.أنثى}</span>
+                            </div>
+                        </div>`
+                    ).join('');
+                    document.getElementById('appsByCommittee').innerHTML = html || '<span style="color:var(--tl)">لا توجد طلبات</span>';
+                }
+
+                const { data: logs } = await supabaseClient.from('login_log').select('*').order('created_at', { ascending: false }).limit(5);
+                if (logs && logs.length) {
+                    document.getElementById('loginLogs').innerHTML = logs.map(l =>
+                        `<div style="display:flex;justify-content:space-between;padding:.3rem 0;border-bottom:1px solid var(--mg);font-size:.82rem">
+                            <span style="color:var(--tm)">${esc(l.email)}</span>
+                            <span style="color:var(--tl)">${new Date(l.created_at).toLocaleString('ar-EG')}</span>
+                        </div>`
+                    ).join('');
+                } else {
+                    document.getElementById('loginLogs').innerHTML = '<span style="color:var(--tl);font-size:.85rem">لا توجد سجلات دخول</span>';
+                }
+            } catch (_) {}
+        }
+
+        async function updateAppsCount() {
+            try {
+                const { count, error } = await supabaseClient.from('applications').select('*', { count: 'exact', head: true });
+                if (!error) document.getElementById('st-apps').textContent = count || 0;
+            } catch (_) {}
+        }
+
+        /* ─── OVERVIEW ─── */
+        function renderOverviewNews() {
+            const el = document.getElementById('overviewNews');
+            if (!DB.news.length) {
+                el.innerHTML = '<p style="color:var(--tl);font-size:.88rem">لا توجد أخبار بعد</p>';
+                return;
+            }
+            el.innerHTML = DB.news.slice(0, 5).map(n => `
+    <div class="item-row">
+      <div class="item-thumb">${n.img ? `<img src="${n.img}" alt=""/>` : '<i class="fas fa-newspaper"></i>'}</div>
+      <div class="item-info"><strong>${n.pinned ? '<i class="fas fa-thumbtack" style="color:var(--p);font-size:.7rem;margin-left:.3rem"></i>' : ''}${esc(n.title)}</strong><span>${esc(n.date)}</span></div>
+    </div>`).join('');
+}
+
+/* ─── NEWS ─── */
+function handleNewsImg(e) {
+  const f = e.target.files[0]; if (!f) return;
+  const r = new FileReader(); r.onload = async ev => {
+    const b64 = await resizeImg(ev.target.result, 1200, 900);
+    newsImgB64 = await uploadImage('news', b64);
+    document.getElementById('nPreviewImg').src = newsImgB64;
+    document.getElementById('nPreviewImg').style.objectPosition = 'center';
+    document.getElementById('nImgPreview').style.display = 'block';
+    document.getElementById('nUploadZone').style.display = 'none';
+    newsImgPos = 'center';
+    document.querySelectorAll('#nImgPreview .pos-btn').forEach(b => b.classList.toggle('active', b.dataset.pos === 'center'));
+  }; r.readAsDataURL(f);
+}
+
+function clearNewsImg() {
+  newsImgB64 = ''; newsImgPos = 'center';
+  document.getElementById('nImgFile').value = '';
+  document.getElementById('nImgPreview').style.display = 'none';
+  document.getElementById('nUploadZone').style.display = 'block';
+}
+
+async function togglePinNews(id) {
+  const n = DB.news.find(x => x.id === id); if (!n) return;
+  n.pinned = !n.pinned;
+  try {
+    await saveNewsToSupabase(n);
+    renderNewsList(); renderOverviewNews(); toast(n.pinned ? 'تم تثبيت الخبر' : 'تم إلغاء التثبيت', 'ok');
+  } catch (e) { n.pinned = !n.pinned; toast('❌ ' + (e.message || e), 'err'); }
+}
+
+function setPos(btn, ctx) {
+  const pos = btn.dataset.pos;
+  if (ctx === 'n') { newsImgPos = pos; document.getElementById('nPreviewImg').style.objectPosition = pos; document.querySelectorAll('#nImgPreview .pos-btn').forEach(b => b.classList.toggle('active', b === btn)); }
+  if (ctx === 'edit') { editImgPos = pos; document.getElementById('editNPreview').style.objectPosition = pos; document.querySelectorAll('#editNImgPreview .pos-btn').forEach(b => b.classList.toggle('active', b === btn)); }
+}
+
+async function publishNews() {
+  const title = document.getElementById('nTitle').value.trim();
+  const desc = document.getElementById('nDesc').value.trim();
+  if (!title || !desc) { toast('يرجى ملء العنوان والتفاصيل', 'err'); return; }
+  const btn = document.getElementById('publishBtn');
+  btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري النشر...';
+  showSync('n', 'جاري الحفظ على الخادم...');
+  const item = { id: 'n' + Date.now(), title, desc, date: arabicDate(), img: newsImgB64, imgPos: newsImgPos, pinned: false };
+  try {
+    await saveNewsToSupabase(item);
+    DB.news.unshift(item);
+    btn.disabled = false; btn.innerHTML = '<i class="fas fa-paper-plane"></i> نشر الخبر';
+    hideSync('n');
+    document.getElementById('nTitle').value = ''; document.getElementById('nDesc').value = ''; clearNewsImg();
+    renderNewsList(); updateStats(); renderOverviewNews(); toast('تم نشر الخبر بنجاح ✔', 'ok');
+  } catch (e) {
+    btn.disabled = false; btn.innerHTML = '<i class="fas fa-paper-plane"></i> نشر الخبر';
+    hideSync('n');
+    toast('❌ ' + (e.message || e), 'err');
+    console.error('Publish error:', e);
+  }
+}
+
+function renderNewsList() {
+  const el = document.getElementById('newsList'); if (!el) return;
+  if (!DB.news.length) { el.innerHTML = '<p style="text-align:center;color:var(--tl);padding:1rem">لا توجد أخبار</p>'; return; }
+  el.innerHTML = DB.news.map(n => `
+    <div class="item-row">
+      <div class="item-thumb">${n.img ? `<img src="${n.img}" alt=""/>` : '<i class="fas fa-newspaper"></i>'}</div>
+      <div class="item-info">
+        <strong>${n.pinned ? '<i class="fas fa-thumbtack" style="color:var(--p);font-size:.75rem;margin-left:.3rem"></i>' : ''}${esc(n.title)}</strong>
+        <span>${esc(n.date)}</span>
+      </div>
+      <div class="item-actions">
+        <button class="btn btn-ghost btn-sm" onclick="togglePinNews('${n.id}')" title="${n.pinned ? 'إلغاء التثبيت' : 'تثبيت'}"><i class="fas fa-thumbtack" style="${n.pinned ? 'color:var(--p)' : ''}"></i></button>
+        <button class="btn btn-ghost btn-sm" onclick="openEditNews('${n.id}')"><i class="fas fa-pen"></i></button>
+        <button class="btn btn-danger btn-sm" onclick="deleteNews('${n.id}')"><i class="fas fa-trash"></i></button>
+      </div>
+    </div>`).join('');
+}
+
+function openEditNews(id) {
+  const n = DB.news.find(x => x.id === id); if (!n) return;
+  document.getElementById('editNewsId').value = id;
+  document.getElementById('editNTitle').value = n.title;
+  document.getElementById('editNDesc').value = n.desc;
+  editImgB64 = ''; editImgPos = n.imgPos || 'center'; editImgRemoved = false;
+  if (n.img) {
+    document.getElementById('editNPreview').src = n.img;
+    document.getElementById('editNPreview').style.objectPosition = editImgPos;
+    document.getElementById('editNImgPreview').style.display = 'block';
+    document.querySelectorAll('#editNImgPreview .pos-btn').forEach(b => b.classList.toggle('active', b.dataset.pos === editImgPos));
+  } else {
+    document.getElementById('editNImgPreview').style.display = 'none';
+  }
+  document.getElementById('editNewsModal').style.display = 'flex';
+}
+
+function handleEditImg(e) {
+  const f = e.target.files[0]; if (!f) return;
+  const r = new FileReader(); r.onload = async ev => {
+    const b64 = await resizeImg(ev.target.result, 1200, 900);
+    editImgB64 = await uploadImage('news', b64);
+    document.getElementById('editNPreview').src = editImgB64;
+    document.getElementById('editNPreview').style.objectPosition = editImgPos;
+    document.getElementById('editNImgPreview').style.display = 'block';
+  }; r.readAsDataURL(f);
+}
+
+function clearEditImg() { editImgB64 = ''; editImgRemoved = true; document.getElementById('editNImgFile').value = ''; document.getElementById('editNImgPreview').style.display = 'none'; }
+
+async function saveEditNews() {
+  const id = document.getElementById('editNewsId').value;
+  const n = DB.news.find(x => x.id === id); if (!n) return;
+  n.title = document.getElementById('editNTitle').value.trim() || n.title;
+  n.desc = document.getElementById('editNDesc').value.trim() || n.desc;
+  if (editImgRemoved) { n.img = ''; n.imgPos = 'center'; } else if (editImgB64) { n.img = editImgB64; n.imgPos = editImgPos; }
+  showSync('n', 'جاري الحفظ...');
+  try {
+    await saveNewsToSupabase(n);
+    hideSync('n');
+    renderNewsList(); renderOverviewNews(); closeModal('editNewsModal');
+    toast('تم التحديث ✔', 'ok');
+  } catch (e) { hideSync('n'); toast('فشل الحفظ', 'err'); }
+}
+
+async function deleteNews(id) {
+  if (!confirm('حذف هذا الخبر؟')) return;
+  try {
+    await deleteNewsFromSupabase(id);
+    DB.news = DB.news.filter(x => x.id !== id);
+    renderNewsList(); updateStats(); renderOverviewNews(); toast('تم الحذف', 'ok');
+  } catch (e) { toast('فشل الحذف', 'err'); }
+}
+
+/* ─── COMMITTEES ─── */
+function renderCommList() {
+  const el = document.getElementById('committeesList'); if (!el) return;
+  el.innerHTML = DB.committees.map(c => `
+    <div class="item-row">
+      <div class="item-thumb" style="background:var(--al);color:var(--p)"><i class="${esc(c.icon)}"></i></div>
+      <div class="item-info"><strong>${esc(c.name)}</strong><span>${esc((c.shortDesc || '').substring(0, 50))}...</span></div>
+      <div class="item-actions">
+        <button class="btn btn-ghost btn-sm" onclick="openEditComm('${c.id}')"><i class="fas fa-pen"></i></button>
+        <button class="btn btn-danger btn-sm" onclick="deleteComm('${c.id}')"><i class="fas fa-trash"></i></button>
+      </div>
+    </div>`).join('');
+}
+
+function openAddComm() {
+  document.getElementById('addCommName').value = '';
+  document.getElementById('addCommIcon').value = 'fas fa-circle';
+  document.getElementById('addCommShort').value = '';
+  document.getElementById('addCommFull').value = '';
+  document.getElementById('addCommModal').style.display = 'flex';
+}
+
+async function saveAddComm() {
+  const name = document.getElementById('addCommName').value.trim();
+  if (!name) { toast('يرجى إدخال اسم اللجنة', 'err'); return; }
+  const id = 'c' + Date.now();
+  const item = {
+    id,
+    name,
+    icon: document.getElementById('addCommIcon').value.trim() || 'fas fa-circle',
+    shortDesc: document.getElementById('addCommShort').value.trim(),
+    fullDesc: document.getElementById('addCommFull').value.trim()
+  };
+  try {
+    await saveCommitteeToSupabase(item);
+    DB.committees.push(item);
+    renderCommList(); closeModal('addCommModal');
+    renderLeaderSelect(); updateStats();
+    toast('تم إضافة اللجنة ✔', 'ok');
+  } catch (e) { toast('❌ ' + (e.message || e), 'err'); }
+}
+
+async function deleteComm(id) {
+  if (!confirm('حذف هذه اللجنة وكل قياداتها؟')) return;
+  try {
+        await supabaseClient.from('committees').delete().eq('id', id);
+        await supabaseClient.from('leaders').delete().eq('committee_id', id);
+        DB.committees = DB.committees.filter(x => x.id !== id);
+        delete DB.leaders[id];
+    renderCommList(); renderLeaderSelect(); updateStats();
+    toast('تم حذف اللجنة', 'ok');
+  } catch (e) { toast('❌ ' + (e.message || e), 'err'); }
+}
+
+function openEditComm(id) {
+  const c = DB.committees.find(x => x.id === id); if (!c) return;
+  document.getElementById('editCommId').value = id;
+  document.getElementById('editCommName').value = c.name;
+  document.getElementById('editCommIcon').value = c.icon || '';
+  document.getElementById('editCommShort').value = c.shortDesc;
+  document.getElementById('editCommFull').value = c.fullDesc;
+  document.getElementById('editCommModal').style.display = 'flex';
+}
+
+async function saveEditComm() {
+  const id = document.getElementById('editCommId').value;
+  const c = DB.committees.find(x => x.id === id); if (!c) return;
+  c.name = document.getElementById('editCommName').value.trim() || c.name;
+  c.icon = document.getElementById('editCommIcon').value.trim() || c.icon || 'fas fa-circle';
+  c.shortDesc = document.getElementById('editCommShort').value.trim() || c.shortDesc;
+  c.fullDesc = document.getElementById('editCommFull').value.trim() || c.fullDesc;
+  try {
+    await saveCommitteeToSupabase(c);
+    renderCommList(); renderLeaderSelect(); closeModal('editCommModal');
+    updateStats();
+    toast('تم تحديث اللجنة ✔', 'ok');
+  } catch (e) { toast('فشل الحفظ', 'err'); }
+}
+
+/* ─── LEADERS ─── */
+function renderLeaderSelect() {
+  const sel = document.getElementById('leaderSelect'); if (!sel) return;
+  const opts = DB.committees.map(c => `<option value="${c.id}">${esc(c.name)}</option>`).join('');
+  sel.innerHTML = '<option value="">-- اختر لجنة --</option>' + opts;
+}
+
+function loadLeaderForm() {
+  const id = document.getElementById('leaderSelect').value;
+  currentLeaderCommId = id;
+  const container = document.getElementById('leaderForms');
+  if (!id) { container.innerHTML = ''; document.getElementById('leaderSaveRow').style.display = 'none'; document.getElementById('leaderGeneralReset').style.display = 'none'; return; }
+  if (!DB.leaders[id]) DB.leaders[id] = { president: { name: '', role: '', img: '', bio: '' }, vps: [] };
+  const l = DB.leaders[id];
+  // تحويل الصيغة القديمة (vp واحد) إلى الجديدة (vps array)
+  if (l.vp && !l.vps) { l.vps = l.vp.name ? [l.vp] : []; delete l.vp; }
+  if (!l.vps) l.vps = [];
+  leaderImgMap = { presidentB64: l.president.img || '' };
+  l.vps.forEach((vp, i) => { leaderImgMap['vp_' + i] = vp.img || ''; });
+  const defRoleP = id === 'general' ? 'رئيس الاتحاد' : 'رئيس اللجنة';
+  const defRoleV = id === 'general' ? 'نائب رئيس الاتحاد' : 'نائب رئيس اللجنة';
+  let vpHtml = l.vps.map((vp, i) => vpBlock(i, vp, defRoleV)).join('');
+  container.innerHTML = `
+    <div class="form-grid" style="margin-top:1rem">
+      ${leaderBlock('president', l.president, 'الرئيس', defRoleP)}
+      <div class="vps-section" style="grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+        <div style="grid-column:1/-1"><div class="leader-card-title"><i class="fas fa-user-shield"></i> النواب</div></div>
+        ${vpHtml || '<p style="grid-column:1/-1;color:var(--tl);font-size:.88rem">لا يوجد نواب بعد</p>'}
+        <div style="grid-column:1/-1;margin-top:.25rem">
+          <button class="btn btn-outline btn-sm" onclick="addVpForm()"><i class="fas fa-plus"></i> إضافة نائب آخر</button>
+        </div>
+      </div>
+    </div>`;
+  document.getElementById('leaderSaveRow').style.display = 'block';
+  document.getElementById('leaderGeneralReset').style.display = 'block';
+}
+
+function vpBlock(i, p, defRole) {
+  const src = p.img || `https://ui-avatars.com/api/?name=${encodeURIComponent(p.name || 'نائب')}&background=7c3aed&color=fff&size=200&bold=true`;
+  return `<div class="leader-card">
+    <div class="leader-card-title"><i class="fas fa-user-shield"></i> نائب ${i+1}
+      <button class="btn btn-danger btn-sm" onclick="removeVp(${i})" style="margin-right:auto"><i class="fas fa-trash"></i></button>
+    </div>
+    <div class="leader-avatar-row">
+      <img class="leader-avatar" id="lav-vp-${i}" src="${src}" alt=""/>
+      <div>
+        <label class="change-img-btn" for="lfile-vp-${i}"><i class="fas fa-camera"></i> تغيير الصورة</label>
+        <input type="file" id="lfile-vp-${i}" accept="image/*" style="display:none" onchange="handleVpImg(event,${i})"/>
+      </div>
+    </div>
+    <div class="fg"><label>الاسم الكامل</label><input type="text" id="l-name-vp-${i}" value="${esc(p.name)}" placeholder="الاسم..."/></div>
+    <div class="fg"><label>المنصب</label><input type="text" id="l-role-vp-${i}" value="${esc(p.role || defRole)}" placeholder="${defRole}"/></div>
+    <div class="fg"><label>نبذة</label><input type="text" id="l-bio-vp-${i}" value="${esc(p.bio)}" placeholder="نبذة..."/></div>
+  </div>`;
+}
+
+function addVpForm() {
+  const id = currentLeaderCommId;
+  if (!id) return;
+  if (!DB.leaders[id]) DB.leaders[id] = { president: { name: '', role: '', img: '', bio: '' }, vps: [] };
+  DB.leaders[id].vps.push({ name: '', role: '', img: '', bio: '' });
+  loadLeaderForm();
+}
+
+function removeVp(idx) {
+  const id = currentLeaderCommId;
+  if (!id || !DB.leaders[id]) return;
+  DB.leaders[id].vps.splice(idx, 1);
+  loadLeaderForm();
+}
+
+function handleVpImg(e, idx) {
+  const f = e.target.files[0]; if (!f) return;
+  const r = new FileReader(); r.onload = async ev => {
+    const b64 = await resizeImg(ev.target.result, 400, 400, 0.85);
+    leaderImgMap['vp_' + idx] = b64;
+    const el = document.getElementById('lav-vp-' + idx);
+    if (el) el.src = b64;
+  }; r.readAsDataURL(f);
+}
+
+function leaderBlock(type, p, label, defRole) {
+  const src = p.img || `https://ui-avatars.com/api/?name=${encodeURIComponent(p.name || label)}&background=1a56db&color=fff&size=200&bold=true`;
+  return `<div class="leader-card">
+    <div class="leader-card-title"><i class="fas fa-${type === 'president' ? 'crown' : 'user-shield'}"></i> ${label}</div>
+    <div class="leader-avatar-row">
+      <img class="leader-avatar" id="lav-${type}" src="${src}" alt=""/>
+      <div>
+        <label class="change-img-btn" for="lfile-${type}"><i class="fas fa-camera"></i> تغيير الصورة</label>
+        <input type="file" id="lfile-${type}" accept="image/*" style="display:none" onchange="handleLeaderImg(event,'${type}')"/>
+      </div>
+    </div>
+    <div class="fg"><label>الاسم الكامل</label><input type="text" id="l-name-${type}" value="${esc(p.name)}" placeholder="الاسم..."/></div>
+    <div class="fg"><label>المنصب</label><input type="text" id="l-role-${type}" value="${esc(p.role || defRole)}" placeholder="${defRole}"/></div>
+    <div class="fg"><label>نبذة</label><input type="text" id="l-bio-${type}" value="${esc(p.bio)}" placeholder="نبذة..."/></div>
+  </div>`;
+}
+
+function handleLeaderImg(e, type) {
+  const f = e.target.files[0]; if (!f) return;
+  const r = new FileReader(); r.onload = async ev => {
+    const b64 = await resizeImg(ev.target.result, 400, 400, 0.85);
+    const url = await uploadImage('leader_' + type, b64);
+    leaderImgMap[type + 'B64'] = url;
+    document.getElementById('lav-' + type).src = url;
+  }; r.readAsDataURL(f);
+}
+
+async function saveLeaders() {
+  const id = currentLeaderCommId; if (!id) return;
+  if (!DB.leaders[id]) DB.leaders[id] = { president: { name: '', role: '', img: '', bio: '' }, vps: [] };
+  const l = DB.leaders[id];
+
+  const presName = document.getElementById('l-name-president');
+  l.president = {
+    name: (presName ? presName.value.trim() : '') || '',
+    role: (document.getElementById('l-role-president') ? document.getElementById('l-role-president').value.trim() : '') || '',
+    bio: (document.getElementById('l-bio-president') ? document.getElementById('l-bio-president').value.trim() : '') || '',
+    img: leaderImgMap['presidentB64'] || l.president.img || ''
+  };
+
+  const vps = [];
+  const vpCards = document.querySelectorAll('.vps-section .leader-card');
+  vpCards.forEach((card, i) => {
+    const nameInput = document.getElementById('l-name-vp-' + i);
+    if (!nameInput || !nameInput.value.trim()) return;
+    vps.push({
+      name: nameInput.value.trim(),
+      role: (document.getElementById('l-role-vp-' + i) ? document.getElementById('l-role-vp-' + i).value.trim() : '') || '',
+      bio: (document.getElementById('l-bio-vp-' + i) ? document.getElementById('l-bio-vp-' + i).value.trim() : '') || '',
+      img: leaderImgMap['vp_' + i] || (l.vps[i] ? l.vps[i].img : '') || ''
+    });
+  });
+  l.vps = vps;
+
+  showSync('l', 'جاري الحفظ...');
+  try {
+    await saveLeadersToSupabase(id, l.president, l.vps);
+    hideSync('l');
+    updateStats();
+    toast('تم حفظ القيادة ✔', 'ok');
+  } catch (e) { hideSync('l'); toast('فشل الحفظ', 'err'); }
+}
+
+async function deleteLeaders() {
+  if (!currentLeaderCommId) return;
+  if (!confirm('حذف قيادات وأعضاء هذه اللجنة بالكامل؟')) return;
+  try {
+    await supabaseClient.from('leaders').delete().eq('committee_id', currentLeaderCommId);
+    delete DB.leaders[currentLeaderCommId];
+    loadLeaderForm();
+    toast('تم حذف القيادات والأعضاء', 'ok');
+  } catch (e) { toast('❌ ' + (e.message || e), 'err'); }
+}
+
+/* ─── UNION LEADERSHIP ─── */
+var unionPresB64 = '';
+var unionVpsData = [];
+
+function unionVpBlock(i, p) {
+  const src = p.img || `https://ui-avatars.com/api/?name=${encodeURIComponent(p.name || 'نائب')}&background=7c3aed&color=fff&size=200&bold=true`;
+  return `<div class="leader-card">
+    <div class="leader-card-title"><i class="fas fa-user-shield"></i> نائب ${i+1}
+      <button class="btn btn-danger btn-sm" onclick="removeUnionVp(${i})" style="margin-right:auto"><i class="fas fa-trash"></i></button>
+    </div>
+    <div class="leader-avatar-row">
+      <img class="leader-avatar" id="uvp-${i}" src="${src}" alt=""/>
+      <div>
+        <label class="change-img-btn" for="uvpFile-${i}"><i class="fas fa-camera"></i> تغيير الصورة</label>
+        <input type="file" id="uvpFile-${i}" accept="image/*" style="display:none" onchange="handleUnionVpImg(event,${i})"/>
+      </div>
+    </div>
+    <div class="fg"><label>الاسم الكامل</label><input type="text" id="uvp-name-${i}" value="${esc(p.name)}" placeholder="الاسم..."/></div>
+    <div class="fg"><label>المنصب</label><input type="text" id="uvp-role-${i}" value="${esc(p.role || 'نائب رئيس الاتحاد')}" placeholder="نائب رئيس الاتحاد"/></div>
+    <div class="fg"><label>نبذة</label><input type="text" id="uvp-bio-${i}" value="${esc(p.bio)}" placeholder="نبذة..."/></div>
+  </div>`;
+}
+
+function loadUnionForm() {
+  const gen = DB.leaders['general'] || { president: { name: '', role: '', img: '', bio: '' }, vps: [] };
+  if (gen.vp && !gen.vps) { gen.vps = gen.vp.name ? [gen.vp] : []; delete gen.vp; }
+  if (!gen.vps) gen.vps = [];
+  unionPresB64 = gen.president.img || '';
+  document.getElementById('unionPresName').value = gen.president.name || '';
+  document.getElementById('unionPresRole').value = gen.president.role || 'رئيس الاتحاد';
+  document.getElementById('unionPresBio').value = gen.president.bio || '';
+  if (gen.president.img) document.getElementById('unionPresAvatar').src = gen.president.img;
+  unionVpsData = gen.vps.map(v => ({ ...v }));
+  renderUnionVps();
+  document.getElementById('unionSaveRow').style.display = 'block';
+}
+
+function renderUnionVps() {
+  const container = document.getElementById('unionVpsList');
+  if (!container) return;
+  if (!unionVpsData.length) {
+    container.innerHTML = '<p style="grid-column:1/-1;color:var(--tl);font-size:.88rem">لا يوجد نواب بعد</p>';
+    return;
+  }
+  container.innerHTML = unionVpsData.map((vp, i) => unionVpBlock(i, vp)).join('');
+}
+
+function addUnionVp() {
+  unionVpsData.push({ name: '', role: '', img: '', bio: '' });
+  renderUnionVps();
+}
+
+async function removeUnionVp(idx) {
+  unionVpsData.splice(idx, 1);
+  renderUnionVps();
+  await saveUnion();
+}
+
+function handleUnionPresImg(e) {
+  const f = e.target.files[0]; if (!f) return;
+  const r = new FileReader(); r.onload = async ev => {
+    unionPresB64 = await resizeImg(ev.target.result, 400, 400, 0.85);
+    document.getElementById('unionPresAvatar').src = unionPresB64;
+  }; r.readAsDataURL(f);
+}
+
+function handleUnionVpImg(e, idx) {
+  const f = e.target.files[0]; if (!f) return;
+  const r = new FileReader(); r.onload = async ev => {
+    const b64 = await resizeImg(ev.target.result, 400, 400, 0.85);
+    unionVpsData[idx].img = b64;
+    document.getElementById('uvp-' + idx).src = b64;
+  }; r.readAsDataURL(f);
+}
+
+async function saveUnion() {
+  const president = {
+    name: document.getElementById('unionPresName').value.trim(),
+    role: document.getElementById('unionPresRole').value.trim() || 'رئيس الاتحاد',
+    bio: document.getElementById('unionPresBio').value.trim(),
+    img: unionPresB64 || ''
+  };
+  const vps = [];
+  unionVpsData.forEach((vp, i) => {
+    const nameInput = document.getElementById('uvp-name-' + i);
+    if (!nameInput || !nameInput.value.trim()) return;
+    vps.push({
+      name: nameInput.value.trim(),
+      role: document.getElementById('uvp-role-' + i).value.trim() || 'نائب رئيس الاتحاد',
+      bio: document.getElementById('uvp-bio-' + i).value.trim() || '',
+      img: unionVpsData[i].img || ''
+    });
+  });
+  showSync('u', 'جاري الحفظ...');
+  try {
+    await saveLeadersToSupabase('general', president, vps);
+    DB.leaders['general'] = { president, vps };
+    lsSet('watan_db', DB);
+    hideSync('u');
+    toast('تم حفظ قيادة الاتحاد ✔', 'ok');
+  } catch (e) { hideSync('u'); toast('فشل الحفظ', 'err'); }
+}
+
+async function deleteUnion() {
+  if (!confirm('حذف قيادة الاتحاد بالكامل؟')) return;
+  try {
+    await supabaseClient.from('leaders').delete().eq('committee_id', 'general');
+    delete DB.leaders['general'];
+    lsSet('watan_db', DB);
+    unionPresB64 = ''; unionVpsData = [];
+    loadUnionForm();
+    toast('تم الحذف', 'ok');
+  } catch (e) { toast('❌ ' + (e.message || e), 'err'); }
+}
+
+/* ─── COORDINATOR ─── */
+function loadCoordinatorForm() {
+  const co = DB.coordinator || {};
+  const p = co.president || {};
+  const v = co.vp || {};
+  document.getElementById('coordName').value = p.name || '';
+  document.getElementById('coordRole').value = p.role || 'منسق محافظة الإسكندرية';
+  document.getElementById('coordBio').value = p.bio || '';
+  if (p.img) { document.getElementById('coordAvatar').src = p.img; document.getElementById('coordImgB64').value = p.img; }
+  document.getElementById('coordVpName').value = v.name || '';
+  document.getElementById('coordVpRole').value = v.role || 'نائب منسق محافظة الإسكندرية';
+  document.getElementById('coordVpBio').value = v.bio || '';
+  if (v.img) { document.getElementById('coordVpAvatar').src = v.img; document.getElementById('coordVpImgB64').value = v.img; }
+}
+
+function handlePersonImg(e, prefix) {
+  const f = e.target.files[0]; if (!f) return;
+  const r = new FileReader(); r.onload = async ev => {
+    const b64 = await resizeImg(ev.target.result, 400, 400, 0.85);
+    document.getElementById(prefix + 'Avatar').src = b64;
+    document.getElementById(prefix + 'ImgB64').value = b64;
+  }; r.readAsDataURL(f);
+}
+
+async function saveCoordinator() {
+  const president = {
+    name: document.getElementById('coordName').value.trim(),
+    role: document.getElementById('coordRole').value.trim() || 'منسق محافظة الإسكندرية',
+    bio: document.getElementById('coordBio').value.trim(),
+    img: document.getElementById('coordImgB64').value || ''
+  };
+  const vp = {
+    name: document.getElementById('coordVpName').value.trim(),
+    role: document.getElementById('coordVpRole').value.trim() || 'نائب منسق محافظة الإسكندرية',
+    bio: document.getElementById('coordVpBio').value.trim(),
+    img: document.getElementById('coordVpImgB64').value || ''
+  };
+  showSync('c', 'جاري الحفظ...');
+  try {
+    await saveCoordinatorToSupabase(president, vp);
+    DB.coordinator = { president, vp };
+    hideSync('c');
+    toast('تم حفظ منسق المحافظة ✔', 'ok');
+  } catch (e) { hideSync('c'); toast('فشل الحفظ', 'err'); }
+}
+
+/* ─── APPLICATIONS ─── */
+var appsSortAsc = false;
+var appsTimeFilter = 0; // 0=all, 1=12h, 2=day, 3=week, 4=month
+function toggleAppsSort() {
+  appsSortAsc = !appsSortAsc;
+  document.getElementById('sortAppsBtn').innerHTML = `<i class="fas fa-sort-amount-${appsSortAsc ? 'up' : 'down'}"></i> ${appsSortAsc ? 'الأقدم أولاً' : 'الأحدث أولاً'}`;
+  loadApplications();
+}
+function setAppsFilter(hours) {
+  appsTimeFilter = hours;
+  loadApplications();
+}
+async function loadApplications() {
+  const container = document.getElementById('applicationsList');
+  if (!container) return;
+  container.innerHTML = '<p style="text-align:center;color:var(--tl);padding:1rem">جاري التحميل...</p>';
+  try {
+    const { data, error } = await supabaseClient.from('applications').select('*').order('created_at', { ascending: appsSortAsc });
+    if (error) throw error;
+    let filtered = data || [];
+    if (appsTimeFilter > 0) {
+      const cutoff = new Date(Date.now() - appsTimeFilter * 60 * 60 * 1000);
+      filtered = filtered.filter(a => new Date(a.created_at) >= cutoff);
+    }
+    if (!filtered.length) {
+      container.innerHTML = '<p style="text-align:center;color:var(--tl);padding:2rem"><i class="fas fa-inbox"></i> لا توجد طلبات' + (appsTimeFilter ? ' في هذا النطاق' : '') + '</p>';
+      return;
+    }
+    container.innerHTML = filtered.map(a => `
+      <div class="item-row" style="cursor:pointer" onclick="openApplication(${a.id})">
+        <div class="item-thumb" style="background:var(--al);color:var(--p)"><i class="fas fa-user"></i></div>
+        <div class="item-info">
+          <strong>${esc(a.full_name)}</strong>
+          <span>${esc(a.phone)} · ${esc(a.committee_id === 'general' ? 'قيادة الاتحاد العامة' : (DB.committees.find(c => c.id === a.committee_id) || {}).name || a.committee_id)}${(r => r ? ` · العمر: ${r.age}` : '')(extractNationalID(a.national_id))}</span>
+        </div>
+        <div class="item-actions">
+          <span style="font-size:.75rem;color:var(--tl)">${new Date(a.created_at).toLocaleDateString('ar-EG')}</span>
+        </div>
+      </div>`).join('');
+  } catch (e) {
+    container.innerHTML = '<p style="text-align:center;color:var(--err);padding:1rem">❌ فشل تحميل الطلبات</p>';
+  }
+}
+
+function openApplication(id) {
+  currentAppId = id;
+  const a = supabaseClient ? null : null;
+  document.getElementById('appDetailBody').innerHTML = '<p style="text-align:center">جاري التحميل...</p>';
+  document.getElementById('appDetailModal').style.display = 'flex';
+  supabaseClient.from('applications').select('*').eq('id', id).single().then(({ data, error }) => {
+    if (error || !data) {
+      document.getElementById('appDetailBody').innerHTML = '<p style="color:var(--err)">فشل تحميل التفاصيل</p>';
+      return;
+    }
+    const commName = data.committee_id === 'general' ? 'قيادة الاتحاد العامة' : (DB.committees.find(c => c.id === data.committee_id) || {}).name || data.committee_id;
+    document.getElementById('appDetailBody').innerHTML = `
+      <table style="width:100%;border-collapse:collapse">
+        <tr><td style="padding:.4rem .8rem;font-weight:700;color:var(--tm);border-bottom:1px solid var(--mg)">الاسم</td><td style="padding:.4rem .8rem;border-bottom:1px solid var(--mg)">${esc(data.full_name)}</td></tr>
+        <tr><td style="padding:.4rem .8rem;font-weight:700;color:var(--tm);border-bottom:1px solid var(--mg)">الرقم القومي</td><td style="padding:.4rem .8rem;border-bottom:1px solid var(--mg)">${esc(data.national_id)}${(r => r ? `<br><span style="font-size:.85rem;color:var(--tl)"><i class="fas fa-calendar-alt"></i> ${r.date} · العمر: ${r.age} سنة</span>` : '')(extractNationalID(data.national_id))}</td></tr>
+        <tr><td style="padding:.4rem .8rem;font-weight:700;color:var(--tm);border-bottom:1px solid var(--mg)">الهاتف</td><td style="padding:.4rem .8rem;border-bottom:1px solid var(--mg)">${esc(data.phone)}</td></tr>
+        <tr><td style="padding:.4rem .8rem;font-weight:700;color:var(--tm);border-bottom:1px solid var(--mg)">واتساب</td><td style="padding:.4rem .8rem;border-bottom:1px solid var(--mg)">${esc(data.whatsapp)}</td></tr>
+        <tr><td style="padding:.4rem .8rem;font-weight:700;color:var(--tm);border-bottom:1px solid var(--mg)">العنوان</td><td style="padding:.4rem .8rem;border-bottom:1px solid var(--mg)">${esc(data.address || '—')}</td></tr>
+        <tr><td style="padding:.4rem .8rem;font-weight:700;color:var(--tm);border-bottom:1px solid var(--mg)">المؤهل الدراسي</td><td style="padding:.4rem .8rem;border-bottom:1px solid var(--mg)">${esc(data.qualification || '—')}</td></tr>
+        <tr><td style="padding:.4rem .8rem;font-weight:700;color:var(--tm);border-bottom:1px solid var(--mg)">اللجنة</td><td style="padding:.4rem .8rem;border-bottom:1px solid var(--mg)">${esc(commName)}</td></tr>
+        <tr><td style="padding:.4rem .8rem;font-weight:700;color:var(--tm);border-bottom:1px solid var(--mg)">الخبرات</td><td style="padding:.4rem .8rem;border-bottom:1px solid var(--mg)">${esc(data.experience || '—')}</td></tr>
+        <tr><td style="padding:.4rem .8rem;font-weight:700;color:var(--tm)">تاريخ التقديم</td><td style="padding:.4rem .8rem">${new Date(data.created_at).toLocaleString('ar-EG')}</td></tr>
+      </table>`;
+  });
+}
+
+async function deleteApplication() {
+  if (!currentAppId) return;
+  if (!confirm('حذف هذا الطلب؟')) return;
+  try {
+    await supabaseClient.from('applications').delete().eq('id', currentAppId);
+    closeModal('appDetailModal');
+    loadApplications();
+    toast('تم حذف الطلب', 'ok');
+  } catch (e) { toast('❌ ' + (e.message || e), 'err'); }
+}
+
+async function deleteAllApplications() {
+  if (!confirm('⚠️ هل أنت متأكد من حذف جميع طلبات الانضمام؟\nهذا الإجراء لا يمكن التراجع عنه.')) return;
+  if (!confirm('🔴 تأكيد نهائي: حذف الكل؟')) return;
+  try {
+    const { error } = await supabaseClient.from('applications').delete().neq('id', 0);
+    if (error) throw error;
+    loadApplications();
+    updateAppsCount();
+    toast('تم حذف جميع الطلبات ✔', 'ok');
+  } catch (e) { toast('❌ ' + (e.message || e), 'err'); }
+}
+
+/* ─── ADMINS (admin only) ─── */
+async function loadAdmins() {
+  const container = document.getElementById('adminsList');
+  if (!container) return;
+  container.innerHTML = '<p style="text-align:center;color:var(--tl);padding:1rem">جاري التحميل...</p>';
+  try {
+    const [rolesRes, logsRes] = await Promise.all([
+      supabaseClient.from('admin_roles').select('*'),
+      supabaseClient.from('login_log').select('*').order('created_at', { ascending: false })
+    ]);
+    if (rolesRes.error) throw rolesRes.error;
+    if (logsRes.error) throw logsRes.error;
+
+    const roles = rolesRes.data || [];
+    const logs = logsRes.data || [];
+
+    const roleLabels = { admin: 'مدير عام', hr: 'موارد بشرية', news: 'ناشر أخبار' };
+    const roleColors = { admin: 'var(--p)', hr: 'var(--a)', news: 'var(--success)' };
+
+    container.innerHTML = `<table style="width:100%;border-collapse:collapse;font-size:.88rem">
+      <thead><tr style="background:var(--og)">
+        <th style="padding:.6rem .8rem;text-align:right">الإيميل</th>
+        <th style="padding:.6rem .8rem;text-align:right">الدور</th>
+        <th style="padding:.6rem .8rem;text-align:right">آخر دخول</th>
+        <th style="padding:.6rem .8rem;text-align:center">عدد مرات الدخول</th>
+        <th style="padding:.6rem .8rem;text-align:center"></th>
+      </tr></thead><tbody>${roles.map(r => {
+        const userLogs = logs.filter(l => l.email === r.email);
+        const lastLogin = userLogs.length ? new Date(userLogs[0].created_at).toLocaleString('ar-EG') : '—';
+        const loginCount = userLogs.length;
+        const isMe = r.email === adminEmail;
+        return `<tr style="border-bottom:1px solid var(--mg)">
+          <td style="padding:.6rem .8rem">${esc(r.email)} ${isMe ? '<span style="font-size:.72rem;color:var(--tl)">(أنت)</span>' : ''}</td>
+          <td style="padding:.6rem .8rem"><span style="display:inline-block;padding:.15rem .6rem;border-radius:999px;font-size:.78rem;font-weight:700;color:#fff;background:${roleColors[r.role] || 'var(--tm)'}">${roleLabels[r.role] || r.role}</span></td>
+          <td style="padding:.6rem .8rem;color:var(--tm)">${lastLogin}</td>
+          <td style="padding:.6rem .8rem;text-align:center;color:var(--tm)">${loginCount}</td>
+          <td style="padding:.6rem .8rem;text-align:center">${!isMe ? `<button class="btn btn-danger btn-sm" onclick="deleteAdmin('${esc(r.email)}')"><i class="fas fa-trash"></i></button>` : ''}</td>
+        </tr>`;
+      }).join('')}</tbody></table>`;
+  } catch (e) {
+    container.innerHTML = '<p style="text-align:center;color:var(--err);padding:1rem">❌ فشل التحميل: ' + (e.message || e) + '</p>';
+  }
+}
+
+async function deleteAdmin(email) {
+  if (!confirm(`حذف الأدمن ${email}؟`)) return;
+  try {
+    await supabaseClient.from('admin_roles').delete().eq('email', email);
+    await supabaseClient.from('login_log').delete().eq('email', email);
+    loadAdmins();
+    toast('تم حذف الأدمن', 'ok');
+  } catch (e) { toast('❌ ' + (e.message || e), 'err'); }
+}
+
+async function exportApplicationsByCommittee() {
+  const sel = document.getElementById('exportCommitteeSelect');
+  const cid = sel.value;
+  if (!cid) { toast('اختر لجنة أولاً', 'warn'); return; }
+  try {
+    const { data, error } = await supabaseClient.from('applications').select('*').eq('committee_id', cid).order('created_at', { ascending: false });
+    if (error) throw error;
+    if (!data || !data.length) { toast('لا توجد طلبات لهذه اللجنة', 'warn'); return; }
+    const name = cid === 'general' ? 'قيادة الاتحاد' : (DB.committees.find(c => c.id === cid)?.name || cid);
+    const header = 'الاسم الرباعي,الرقم القومي,الجنس,الهاتف,الواتساب,العنوان,المؤهل الدراسي,الخبرات,تاريخ التقديم';
+    const rows = data.map(a => [
+      a.full_name, a.national_id, getGenderFromNationalID(a.national_id),
+      a.phone, a.whatsapp, a.address || '', a.qualification || '',
+      a.experience || '', new Date(a.created_at).toLocaleString('ar-EG')
+    ].map(v => `"${String(v).replace(/"/g, '""')}"`).join(','));
+    const csv = '\uFEFF' + header + '\n' + rows.join('\n');
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `طلبات_${name}_${new Date().toISOString().slice(0,10)}.csv`;
+    link.click();
+    URL.revokeObjectURL(link.href);
+    toast('تم تحميل ' + name + ' ✔', 'ok');
+  } catch (e) { toast('❌ ' + (e.message || e), 'err'); }
+}
+
+async function reportApplicationsByCommittee() {
+  const sel = document.getElementById('exportCommitteeSelect');
+  const cid = sel.value;
+  if (!cid) { toast('اختر لجنة أولاً', 'warn'); return; }
+  const el = document.getElementById('committeeReport');
+  const isVisible = el.style.display === 'block';
+  el.style.display = isVisible ? 'none' : 'block';
+  if (isVisible) return;
+  if (el.style.display === 'block') { document.getElementById('applicationsReport').style.display = 'none'; reportVisible = false; }
+  el.innerHTML = '<p style="text-align:center;color:var(--tl)">جاري التحميل...</p>';
+  try {
+    const { data, error } = await supabaseClient.from('applications').select('*').eq('committee_id', cid).order('created_at', { ascending: false });
+    if (error) throw error;
+    if (!data || !data.length) { el.innerHTML = '<p style="color:var(--tl)">لا توجد طلبات لهذه اللجنة</p>'; return; }
+    const name = cid === 'general' ? 'قيادة الاتحاد' : (DB.committees.find(c => c.id === cid)?.name || cid);
+    const rows = data.map(a => {
+      const info = extractNationalID(a.national_id);
+      return `<tr style="border-bottom:1px solid var(--mg)">
+        <td style="padding:.4rem .6rem;white-space:nowrap">${esc(a.full_name)}</td>
+        <td style="padding:.4rem .6rem;white-space:nowrap">${esc(a.national_id)}</td>
+        <td style="padding:.4rem .6rem">${getGenderFromNationalID(a.national_id)}</td>
+        <td style="padding:.4rem .6rem;white-space:nowrap">${esc(a.phone)}</td>
+        <td style="padding:.4rem .6rem;white-space:nowrap">${esc(a.whatsapp)}</td>
+        <td style="padding:.4rem .6rem">${esc(a.address || '—')}</td>
+        <td style="padding:.4rem .6rem">${esc(a.qualification || '—')}</td>
+        <td style="padding:.4rem .6rem">${info ? `${info.age}` : '—'}</td>
+        <td style="padding:.4rem .6rem;white-space:nowrap;font-size:.8rem">${new Date(a.created_at).toLocaleDateString('ar-EG')}</td>
+      </tr>`;
+    }).join('');
+    el.innerHTML = `<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.5rem">
+      <strong style="color:var(--p)"><i class="fas fa-table"></i> تقرير: ${esc(name)}</strong>
+      <span style="font-size:.82rem;color:var(--tm)">إجمالي: ${data.length} طلب</span>
+    </div>
+    <table style="width:100%;border-collapse:collapse;font-size:.82rem">
+      <thead><tr style="background:var(--og);position:sticky;top:0">
+        <th style="padding:.5rem .6rem;text-align:right">الاسم</th>
+        <th style="padding:.5rem .6rem;text-align:right">الرقم القومي</th>
+        <th style="padding:.5rem .6rem;text-align:right">الجنس</th>
+        <th style="padding:.5rem .6rem;text-align:right">الهاتف</th>
+        <th style="padding:.5rem .6rem;text-align:right">الواتساب</th>
+        <th style="padding:.5rem .6rem;text-align:right">العنوان</th>
+        <th style="padding:.5rem .6rem;text-align:right">المؤهل</th>
+        <th style="padding:.5rem .6rem;text-align:right">العمر</th>
+        <th style="padding:.5rem .6rem;text-align:right">التاريخ</th>
+      </tr></thead><tbody>${rows}</tbody></table>`;
+  } catch (e) { el.innerHTML = '<p style="color:var(--err)">❌ فشل التحميل</p>'; }
+}
+
+async function printApplications(cid) {
+  if (cid === 'all' || !cid) cid = '';
+  try {
+    let query = supabaseClient.from('applications').select('*').order('created_at', { ascending: false });
+    if (cid) query = query.eq('committee_id', cid);
+    const { data, error } = await query;
+    if (error) throw error;
+    if (!data || !data.length) { toast('لا توجد طلبات', 'warn'); return; }
+
+    const commName = cid => cid === 'general' ? 'قيادة الاتحاد' : (DB.committees.find(c => c.id === cid)?.name || cid);
+    const title = cid ? `تقرير: ${commName(cid)}` : 'تقرير جميع الطلبات';
+
+    const rows = data.map(a => {
+      const info = extractNationalID(a.national_id);
+      return `<tr>
+        <td style="padding:6px 10px;border:1px solid #ddd;text-align:right">${esc(a.full_name)}</td>
+        <td style="padding:6px 10px;border:1px solid #ddd;text-align:right">${esc(a.national_id)}</td>
+        <td style="padding:6px 10px;border:1px solid #ddd;text-align:center">${getGenderFromNationalID(a.national_id)}</td>
+        <td style="padding:6px 10px;border:1px solid #ddd;text-align:left;direction:ltr">${esc(a.phone)}</td>
+        <td style="padding:6px 10px;border:1px solid #ddd;text-align:right">${esc(commName(a.committee_id))}</td>
+        <td style="padding:6px 10px;border:1px solid #ddd;text-align:center">${info ? info.age : '—'}</td>
+        <td style="padding:6px 10px;border:1px solid #ddd;text-align:center">${new Date(a.created_at).toLocaleDateString('ar-EG')}</td>
+      </tr>`;
+    }).join('');
+
+    const w = window.open('', '_blank');
+    w.document.write(`<!DOCTYPE html><html dir="rtl"><head><meta charset="UTF-8"><title>${title}</title>
+      <style>
+        body{font-family:Cairo,Arial,sans-serif;padding:20px;color:#222}
+        h2{text-align:center;margin-bottom:5px;color:#1a56db}
+        .sub{text-align:center;color:#666;font-size:14px;margin-bottom:20px}
+        table{width:100%;border-collapse:collapse;font-size:13px}
+        th{background:#1a56db;color:#fff;padding:8px 10px;border:1px solid #1a56db;text-align:right}
+        td{padding:6px 10px;border:1px solid #ddd}
+        tr:nth-child(even){background:#f8fafc}
+        .footer{text-align:center;margin-top:20px;font-size:12px;color:#999;border-top:1px solid #eee;padding-top:10px}
+        @media print{body{padding:10mm}button{display:none}}
+      </style></head><body>
+      <h2>اتحاد شباب الوطن - الإسكندرية</h2>
+      <div class="sub">${title} · إجمالي: ${data.length} طلب · ${new Date().toLocaleDateString('ar-EG')}</div>
+      <table>
+        <thead><tr>
+          <th>الاسم</th><th>الرقم القومي</th><th>الجنس</th><th>الهاتف</th><th>اللجنة</th><th>العمر</th><th>التاريخ</th>
+        </tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+      <div class="footer">تم التصدير من لوحة إدارة اتحاد شباب الوطن - الإسكندرية</div>
+      <script>window.onload=function(){setTimeout(function(){window.print()},500)}<\/script>
+    </body></html>`);
+    w.document.close();
+  } catch (e) { toast('❌ ' + (e.message || e), 'err'); }
+}
+
+async function exportApplicationsAll() {
+  try {
+    const { data, error } = await supabaseClient.from('applications').select('*').order('created_at', { ascending: false });
+    if (error) throw error;
+    if (!data || !data.length) { toast('لا توجد طلبات للتصدير', 'warn'); return; }
+    const comms = DB.committees;
+    const commName = cid => cid === 'general' ? 'قيادة الاتحاد' : (comms.find(c => c.id === cid) || {}).name || cid;
+    const header = 'الاسم الرباعي,الرقم القومي,الجنس,الهاتف,الواتساب,العنوان,المؤهل الدراسي,اللجنة,الخبرات,تاريخ التقديم';
+    const rows = data.map(a => [
+      a.full_name, a.national_id, getGenderFromNationalID(a.national_id),
+      a.phone, a.whatsapp, a.address || '', a.qualification || '',
+      commName(a.committee_id), a.experience || '',
+      new Date(a.created_at).toLocaleString('ar-EG')
+    ].map(v => `"${String(v).replace(/"/g, '""')}"`).join(','));
+    const csv = '\uFEFF' + header + '\n' + rows.join('\n');
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'كل_الطلبات_' + new Date().toISOString().slice(0,10) + '.csv';
+    link.click();
+    URL.revokeObjectURL(link.href);
+    toast('تم تحميل الكل ✔', 'ok');
+  } catch (e) { toast('❌ ' + (e.message || e), 'err'); }
+}
+
+async function exportApplicationsPerCommittee() {
+  try {
+    const { data, error } = await supabaseClient.from('applications').select('*').order('created_at', { ascending: false });
+    if (error) throw error;
+    if (!data || !data.length) { toast('لا توجد طلبات للتصدير', 'warn'); return; }
+
+    const comms = DB.committees;
+    const commName = cid => cid === 'general' ? 'قيادة الاتحاد' : (comms.find(c => c.id === cid) || {}).name || cid;
+
+    const grouped = {};
+    data.forEach(a => {
+      const key = commName(a.committee_id);
+      if (!grouped[key]) grouped[key] = [];
+      grouped[key].push(a);
+    });
+
+    const header = 'الاسم الرباعي,الرقم القومي,الجنس,الهاتف,الواتساب,العنوان,المؤهل الدراسي,الخبرات,تاريخ التقديم';
+    const escCSV = v => `"${String(v).replace(/"/g, '""')}"`;
+
+    Object.entries(grouped).forEach(([name, apps]) => {
+      const rows = apps.map(a => [
+        a.full_name, a.national_id,
+        getGenderFromNationalID(a.national_id),
+        a.phone, a.whatsapp,
+        a.address || '', a.qualification || '',
+        a.experience || '',
+        new Date(a.created_at).toLocaleString('ar-EG')
+      ].map(escCSV).join(','));
+      const csv = '\uFEFF' + header + '\n' + rows.join('\n');
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = `طلبات_${name}_${new Date().toISOString().slice(0,10)}.csv`;
+      link.click();
+      URL.revokeObjectURL(link.href);
+    });
+
+    toast(`تم تحميل ${Object.keys(grouped).length} ملف ✔`, 'ok');
+  } catch (e) { toast('❌ ' + (e.message || e), 'err'); }
+}
+
+var reportVisible = false;
+async function toggleApplicationsReport() {
+  const el = document.getElementById('applicationsReport');
+  reportVisible = !reportVisible;
+  el.style.display = reportVisible ? 'block' : 'none';
+  if (reportVisible) document.getElementById('committeeReport').style.display = 'none';
+  if (!reportVisible) return;
+  el.innerHTML = '<p style="text-align:center;color:var(--tl)">جاري التحميل...</p>';
+  try {
+    const { data, error } = await supabaseClient.from('applications').select('*').order('created_at', { ascending: false });
+    if (error) throw error;
+    if (!data || !data.length) { el.innerHTML = '<p style="color:var(--tl)">لا توجد طلبات</p>'; return; }
+    const commName = cid => cid === 'general' ? 'قيادة الاتحاد' : (DB.committees.find(c => c.id === cid) || {}).name || cid;
+    const rows = data.map(a => {
+      const info = extractNationalID(a.national_id);
+      return `<tr style="border-bottom:1px solid var(--mg)">
+        <td style="padding:.4rem .6rem;white-space:nowrap">${esc(a.full_name)}</td>
+        <td style="padding:.4rem .6rem;white-space:nowrap">${esc(a.national_id)}</td>
+        <td style="padding:.4rem .6rem">${getGenderFromNationalID(a.national_id)}</td>
+        <td style="padding:.4rem .6rem;white-space:nowrap">${esc(a.phone)}</td>
+        <td style="padding:.4rem .6rem;white-space:nowrap">${esc(a.whatsapp)}</td>
+        <td style="padding:.4rem .6rem">${esc(a.address || '—')}</td>
+        <td style="padding:.4rem .6rem">${esc(a.qualification || '—')}</td>
+        <td style="padding:.4rem .6rem">${esc(commName(a.committee_id))}</td>
+        <td style="padding:.4rem .6rem">${info ? `${info.age}` : '—'}</td>
+        <td style="padding:.4rem .6rem;white-space:nowrap;font-size:.8rem">${new Date(a.created_at).toLocaleDateString('ar-EG')}</td>
+      </tr>`;
+    }).join('');
+    el.innerHTML = `<table style="width:100%;border-collapse:collapse;font-size:.82rem">
+      <thead><tr style="background:var(--og);position:sticky;top:0">
+        <th style="padding:.5rem .6rem;text-align:right">الاسم</th>
+        <th style="padding:.5rem .6rem;text-align:right">الرقم القومي</th>
+        <th style="padding:.5rem .6rem;text-align:right">الجنس</th>
+        <th style="padding:.5rem .6rem;text-align:right">الهاتف</th>
+        <th style="padding:.5rem .6rem;text-align:right">الواتساب</th>
+        <th style="padding:.5rem .6rem;text-align:right">العنوان</th>
+        <th style="padding:.5rem .6rem;text-align:right">المؤهل</th>
+        <th style="padding:.5rem .6rem;text-align:right">اللجنة</th>
+        <th style="padding:.5rem .6rem;text-align:right">العمر</th>
+        <th style="padding:.5rem .6rem;text-align:right">التاريخ</th>
+      </tr></thead><tbody>${rows}</tbody></table>
+      <p style="font-size:.78rem;color:var(--tl);margin-top:.5rem">إجمالي: ${data.length} طلب</p>`;
+  } catch (e) { el.innerHTML = '<p style="color:var(--err)">❌ فشل التحميل</p>'; }
+}
+
+/* ─── Sync indicators ─── */
+function showSync(ctx, msg) {
+  const row = document.getElementById(ctx + 'SyncRow');
+  const dot = document.getElementById(ctx + 'SyncDot');
+  const txt = document.getElementById(ctx + 'SyncTxt');
+  if (row) { row.style.display = 'flex'; dot.className = 'sync-dot syncing'; txt.textContent = msg; }
+}
+
+function hideSync(ctx) {
+  const row = document.getElementById(ctx + 'SyncRow');
+  const dot = document.getElementById(ctx + 'SyncDot');
+  if (row) { dot.className = 'sync-dot ok'; setTimeout(() => row.style.display = 'none', 2000); }
+}
+
+/* ─── استخراج الجنس من الرقم القومي ─── */
+function getGenderFromNationalID(id) {
+  if (!/^\d{14}$/.test(id)) return 'غير معروف';
+  const digit = parseInt(id[12], 10);
+  return digit % 2 === 1 ? 'ذكر' : 'أنثى';
+}
+
+/* ─── استخراج العمر من الرقم القومي ─── */
+function extractNationalID(id) {
+  if (!/^\d{14}$/.test(id)) return null;
+  const century = id[0] === '2' ? 1900 : id[0] === '3' ? 2000 : 0;
+  if (!century) return null;
+  const year = century + parseInt(id.slice(1, 3), 10);
+  const month = parseInt(id.slice(3, 5), 10) - 1;
+  const day = parseInt(id.slice(5, 7), 10);
+  const bd = new Date(year, month, day);
+  if (isNaN(bd.getTime())) return null;
+  const now = new Date();
+  let age = now.getFullYear() - bd.getFullYear();
+  const mDiff = now.getMonth() - bd.getMonth();
+  if (mDiff < 0 || (mDiff === 0 && now.getDate() < bd.getDate())) age--;
+  return { date: bd.toLocaleDateString('ar-EG', { year: 'numeric', month: 'long', day: 'numeric' }), age };
+}
+
+/* ─── Toast ─── */
+function toast(msg, type = 'ok') {
+  document.querySelectorAll('.toast-x').forEach(t => t.remove());
+  const t = document.createElement('div'); t.className = 'toast-x';
+  const colors = { ok: 'var(--ok)', err: 'var(--err)', warn: '#f59e0b' };
+  Object.assign(t.style, {
+    position: 'fixed', bottom: '2rem', right: '2rem', background: colors[type] || colors.ok,
+    color: '#fff', padding: '.8rem 1.5rem', borderRadius: '999px', fontFamily: 'var(--font)',
+    fontWeight: '700', fontSize: '.9rem', zIndex: '9999', boxShadow: '0 4px 20px rgba(0,0,0,.2)',
+    opacity: '0', transform: 'translateY(10px)', transition: 'all .3s', display: 'flex', alignItems: 'center', gap: '.5rem'
+  });
+  t.innerHTML = `<i class="fas ${type === 'ok' ? 'fa-check-circle' : type === 'err' ? 'fa-times-circle' : 'fa-exclamation-circle'}"></i> ${msg}`;
+  document.body.appendChild(t);
+  requestAnimationFrame(() => { t.style.opacity = '1'; t.style.transform = 'translateY(0)'; });
+  setTimeout(() => { t.style.opacity = '0'; t.style.transform = 'translateY(10px)'; setTimeout(() => t.remove(), 300); }, 3500);
+}
+    </script>
+</body>
+
+</html>
