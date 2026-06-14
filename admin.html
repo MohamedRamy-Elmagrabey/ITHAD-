@@ -846,12 +846,49 @@
             }
         }
         /* Switch toggle */
-        .switch{position:relative;display:inline-block;width:44px;height:24px;flex-shrink:0}
-        .switch input{opacity:0;width:0;height:0}
-        .slider{position:absolute;cursor:pointer;inset:0;background:var(--mg);transition:.3s;border-radius:24px}
-        .slider::before{content:'';position:absolute;height:18px;width:18px;left:3px;bottom:3px;background:#fff;transition:.3s;border-radius:50%}
-        input:checked+.slider{background:var(--p)}
-        input:checked+.slider::before{transform:translateX(20px)}
+        
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 44px;
+            height: 24px;
+            flex-shrink: 0
+        }
+        
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0
+        }
+        
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            inset: 0;
+            background: var(--mg);
+            transition: .3s;
+            border-radius: 24px
+        }
+        
+        .slider::before {
+            content: '';
+            position: absolute;
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background: #fff;
+            transition: .3s;
+            border-radius: 50%
+        }
+        
+        input:checked+.slider {
+            background: var(--p)
+        }
+        
+        input:checked+.slider::before {
+            transform: translateX(20px)
+        }
         /* Responsive */
         
         @media(max-width:900px) {
@@ -879,7 +916,7 @@
                 z-index: 99;
                 background: rgba(0, 0, 0, .4)
             }
-            .sidebar.open ~ .sidebar-overlay {
+            .sidebar.open~.sidebar-overlay {
                 display: block
             }
             .main {
@@ -1158,12 +1195,12 @@
                         </div>
                         <div id="leaderForms"></div>
 
-          <div id="leaderGeneralReset" style="display:none;margin-top:.5rem">
-            <button class="btn btn-danger btn-sm" onclick="deleteLeaders()"><i class="fas fa-trash"></i> حذف قيادات هذه اللجنة</button>
-          </div>
-          <div id="leaderSaveRow" style="display:none;margin-top:1rem">
-            <button class="btn btn-primary" onclick="saveLeaders()"><i class="fas fa-save"></i> حفظ القيادات</button>
-            <button class="btn btn-danger" onclick="deleteLeaders()" style="margin-right:.5rem"><i class="fas fa-trash"></i> حذف القيادات</button>
+                        <div id="leaderGeneralReset" style="display:none;margin-top:.5rem">
+                            <button class="btn btn-danger btn-sm" onclick="deleteLeaders()"><i class="fas fa-trash"></i> حذف قيادات هذه اللجنة</button>
+                        </div>
+                        <div id="leaderSaveRow" style="display:none;margin-top:1rem">
+                            <button class="btn btn-primary" onclick="saveLeaders()"><i class="fas fa-save"></i> حفظ القيادات</button>
+                            <button class="btn btn-danger" onclick="deleteLeaders()" style="margin-right:.5rem"><i class="fas fa-trash"></i> حذف القيادات</button>
                             <div class="sync-row" id="lSyncRow" style="display:none;margin-top:.5rem">
                                 <div class="sync-dot syncing" id="lSyncDot"></div>
                                 <span id="lSyncTxt">جاري الحفظ...</span>
@@ -1229,18 +1266,20 @@
                                 <div class="leader-card" id="unionPresidentCard">
                                     <div class="leader-card-title"><i class="fas fa-crown"></i> رئيس الاتحاد</div>
                                     <div class="leader-avatar-row">
-                                        <img class="leader-avatar" id="unionPresAvatar" src="https://ui-avatars.com/api/?name=الرئيس&background=1a56db&color=fff&size=200&bold=true" alt=""/>
+                                        <img class="leader-avatar" id="unionPresAvatar" src="https://ui-avatars.com/api/?name=الرئيس&background=1a56db&color=fff&size=200&bold=true" alt="" />
                                         <div>
                                             <label class="change-img-btn" for="unionPresImgFile"><i class="fas fa-camera"></i> تغيير الصورة</label>
-                                            <input type="file" id="unionPresImgFile" accept="image/*" style="display:none" onchange="handleUnionPresImg(event)"/>
+                                            <input type="file" id="unionPresImgFile" accept="image/*" style="display:none" onchange="handleUnionPresImg(event)" />
                                         </div>
                                     </div>
-                                    <div class="fg"><label>الاسم الكامل</label><input type="text" id="unionPresName" placeholder="اسم رئيس الاتحاد..."/></div>
-                                    <div class="fg"><label>المنصب</label><input type="text" id="unionPresRole" value="رئيس الاتحاد"/></div>
-                                    <div class="fg"><label>نبذة مختصرة</label><input type="text" id="unionPresBio" placeholder="نبذة..."/></div>
+                                    <div class="fg"><label>الاسم الكامل</label><input type="text" id="unionPresName" placeholder="اسم رئيس الاتحاد..." /></div>
+                                    <div class="fg"><label>المنصب</label><input type="text" id="unionPresRole" value="رئيس الاتحاد" /></div>
+                                    <div class="fg"><label>نبذة مختصرة</label><input type="text" id="unionPresBio" placeholder="نبذة..." /></div>
                                 </div>
                                 <div class="vps-section" style="grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr;gap:1rem" id="unionVpsContainer">
-                                    <div style="grid-column:1/-1"><div class="leader-card-title"><i class="fas fa-user-shield"></i> نواب رئيس الاتحاد</div></div>
+                                    <div style="grid-column:1/-1">
+                                        <div class="leader-card-title"><i class="fas fa-user-shield"></i> نواب رئيس الاتحاد</div>
+                                    </div>
                                     <div id="unionVpsList"></div>
                                     <div style="grid-column:1/-1;margin-top:.25rem">
                                         <button class="btn btn-outline btn-sm" onclick="addUnionVp()"><i class="fas fa-plus"></i> إضافة نائب</button>
@@ -1333,11 +1372,11 @@
                                 <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem">
                                     <div class="fg">
                                         <label>فتح التقديم من</label>
-                                        <input type="datetime-local" id="formOpenAt"/>
+                                        <input type="datetime-local" id="formOpenAt" />
                                     </div>
                                     <div class="fg">
                                         <label>إلى</label>
-                                        <input type="datetime-local" id="formCloseAt"/>
+                                        <input type="datetime-local" id="formCloseAt" />
                                     </div>
                                 </div>
                             </div>
@@ -1417,9 +1456,9 @@
                 إضافة لجنة جديدة
                 <span class="modal-close" onclick="closeModal('addCommModal')"><i class="fas fa-times"></i></span>
             </div>
-            <div class="fg"><label>اسم اللجنة</label><input type="text" id="addCommName" placeholder="مثال: العلاقات العامة"/></div>
-            <div class="fg"><label>الأيقونة (Font Awesome)</label><input type="text" id="addCommIcon" value="fas fa-circle" placeholder="fas fa-handshake"/></div>
-            <div class="fg"><label>الوصف المختصر</label><input type="text" id="addCommShort" placeholder="وصف مختصر..."/></div>
+            <div class="fg"><label>اسم اللجنة</label><input type="text" id="addCommName" placeholder="مثال: العلاقات العامة" /></div>
+            <div class="fg"><label>الأيقونة (Font Awesome)</label><input type="text" id="addCommIcon" value="fas fa-circle" placeholder="fas fa-handshake" /></div>
+            <div class="fg"><label>الوصف المختصر</label><input type="text" id="addCommShort" placeholder="وصف مختصر..." /></div>
             <div class="fg"><label>الوصف التفصيلي</label><textarea id="addCommFull" style="height:140px" placeholder="وصف تفصيلي للجنة..."></textarea></div>
             <div style="display:flex;gap:.75rem;margin-top:1rem">
                 <button class="btn btn-primary" style="flex:1" onclick="saveAddComm()"><i class="fas fa-save"></i> حفظ</button>
@@ -1437,7 +1476,7 @@
             </div>
             <input type="hidden" id="editCommId" />
             <div class="fg"><label>اسم اللجنة</label><input type="text" id="editCommName" /></div>
-            <div class="fg"><label>الأيقونة (Font Awesome)</label><input type="text" id="editCommIcon" placeholder="fas fa-handshake"/></div>
+            <div class="fg"><label>الأيقونة (Font Awesome)</label><input type="text" id="editCommIcon" placeholder="fas fa-handshake" /></div>
             <div class="fg"><label>الوصف المختصر</label><input type="text" id="editCommShort" /></div>
             <div class="fg"><label>الوصف التفصيلي</label><textarea id="editCommFull" style="height:140px"></textarea></div>
             <div style="display:flex;gap:.75rem;margin-top:1rem">
@@ -1523,18 +1562,34 @@
 
         async function checkAdminRole() {
             try {
-                const { data: { user } } = await supabaseClient.auth.getUser();
-                if (!user || !user.email) { adminRole = 'hr'; adminEmail = ''; return; }
+                const {
+                    data: {
+                        user
+                    }
+                } = await supabaseClient.auth.getUser();
+                if (!user || !user.email) {
+                    adminRole = 'hr';
+                    adminEmail = '';
+                    return;
+                }
                 adminEmail = user.email;
-                const { data } = await supabaseClient.from('admin_roles').select('role').eq('email', user.email).single();
+                const {
+                    data
+                } = await supabaseClient.from('admin_roles').select('role').eq('email', user.email).single();
                 adminRole = (data && data.role) || 'hr';
-            } catch (_) { adminRole = 'hr'; adminEmail = ''; }
+            } catch (_) {
+                adminRole = 'hr';
+                adminEmail = '';
+            }
         }
 
         async function logLogin() {
             if (!adminEmail || !adminRole) return;
             try {
-                await supabaseClient.from('login_log').insert({ email: adminEmail, role: adminRole });
+                await supabaseClient.from('login_log').insert({
+                    email: adminEmail,
+                    role: adminRole
+                });
             } catch (_) {}
         }
 
@@ -1560,7 +1615,11 @@
 
         (async() => {
             if (sessionStorage.getItem('watan_auth') === '1' && supabaseClient) {
-                const { data: { session } } = await supabaseClient.auth.getSession();
+                const {
+                    data: {
+                        session
+                    }
+                } = await supabaseClient.auth.getSession();
                 if (session) {
                     await checkAdminRole();
                     logLogin();
@@ -1588,7 +1647,10 @@
                     committees: DEFAULT_COMMITTEES,
                     leaders: {},
                     news: DEFAULT_NEWS,
-                    coordinator: { president: {}, vp: {} }
+                    coordinator: {
+                        president: {},
+                        vp: {}
+                    }
                 };
                 setBadge(false, 'غير متصل');
                 return;
@@ -1611,11 +1673,29 @@
 
                 const leadersMap = {};
                 (leadersRes.data || []).forEach(l => {
-                    if (!leadersMap[l.committee_id]) leadersMap[l.committee_id] = { president: { name: '', role: '', img: '', bio: '' }, vps: [] };
+                    if (!leadersMap[l.committee_id]) leadersMap[l.committee_id] = {
+                        president: {
+                            name: '',
+                            role: '',
+                            img: '',
+                            bio: ''
+                        },
+                        vps: []
+                    };
                     if (l.type === 'president') {
-                        leadersMap[l.committee_id].president = { name: l.name, role: l.role, img: l.img, bio: l.bio };
+                        leadersMap[l.committee_id].president = {
+                            name: l.name,
+                            role: l.role,
+                            img: l.img,
+                            bio: l.bio
+                        };
                     } else if (l.type === 'vp') {
-                        leadersMap[l.committee_id].vps.push({ name: l.name, role: l.role, img: l.img, bio: l.bio });
+                        leadersMap[l.committee_id].vps.push({
+                            name: l.name,
+                            role: l.role,
+                            img: l.img,
+                            bio: l.bio
+                        });
                     }
                 });
 
@@ -1653,7 +1733,10 @@
                         committees: DEFAULT_COMMITTEES,
                         leaders: {},
                         news: DEFAULT_NEWS,
-                        coordinator: { president: {}, vp: {} }
+                        coordinator: {
+                            president: {},
+                            vp: {}
+                        }
                     };
                 }
             }
@@ -1686,22 +1769,32 @@
 
         async function saveLeadersToSupabase(committeeId, president, vps) {
             // نمسح بس النواب عشان ما نأثرش ع الرئـيس
-            const { error: delVps } = await supabaseClient.from('leaders').delete().eq('committee_id', committeeId).eq('type', 'vp');
+            const {
+                error: delVps
+            } = await supabaseClient.from('leaders').delete().eq('committee_id', committeeId).eq('type', 'vp');
             if (delVps) throw delVps;
 
             // نمسح الرئيس القديم وندرج الجديد
             await supabaseClient.from('leaders').delete().eq('committee_id', committeeId).eq('type', 'president');
 
             if (president && president.name) {
-                const { error } = await supabaseClient.from('leaders').insert({
-                    committee_id: committeeId, type: 'president', ...president
+                const {
+                    error
+                } = await supabaseClient.from('leaders').insert({
+                    committee_id: committeeId,
+                    type: 'president',
+                    ...president
                 });
                 if (error) throw error;
             }
-            for (const vp of (vps || [])) {
+            for (const vp of(vps || [])) {
                 if (vp && vp.name) {
-                    const { error } = await supabaseClient.from('leaders').insert({
-                        committee_id: committeeId, type: 'vp', ...vp
+                    const {
+                        error
+                    } = await supabaseClient.from('leaders').insert({
+                        committee_id: committeeId,
+                        type: 'vp',
+                        ...vp
                     });
                     if (error) throw error;
                 }
@@ -1709,11 +1802,20 @@
         }
 
         /* ─── Form Settings ─── */
-        var formSettings = { form_open: true, form_message: '', schedule_enabled: false, form_open_at: '', form_close_at: '' };
+        var formSettings = {
+            form_open: true,
+            form_message: '',
+            schedule_enabled: false,
+            form_open_at: '',
+            form_close_at: ''
+        };
 
         async function loadFormSettings() {
             try {
-                const { data, error } = await supabaseClient.from('app_settings').select('*').eq('id', 'form').single();
+                const {
+                    data,
+                    error
+                } = await supabaseClient.from('app_settings').select('*').eq('id', 'form').single();
                 if (error && error.code !== 'PGRST116') throw error;
                 if (data) formSettings = data;
             } catch (e) {
@@ -1751,7 +1853,11 @@
                 form_close_at: document.getElementById('formCloseAt').value ? new Date(document.getElementById('formCloseAt').value).toISOString() : null
             };
             try {
-                const { error } = await supabaseClient.from('app_settings').upsert(payload, { onConflict: 'id' });
+                const {
+                    error
+                } = await supabaseClient.from('app_settings').upsert(payload, {
+                    onConflict: 'id'
+                });
                 if (error) throw error;
                 formSettings = payload;
                 updateFormStatusText();
@@ -1821,7 +1927,9 @@
             document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
             document.getElementById('page-' + name).classList.add('active');
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-            try { if (event && event.currentTarget) event.currentTarget.classList.add('active'); } catch(_) {}
+            try {
+                if (event && event.currentTarget) event.currentTarget.classList.add('active');
+            } catch (_) {}
             document.getElementById('sidebar').classList.remove('open');
             const titles = {
                 overview: 'نظرة عامة',
@@ -1867,9 +1975,16 @@
             if (!sel) return;
             const val = sel.value;
             sel.innerHTML = '<option value="">-- اختر اللجنة --</option><option value="general">قيادة الاتحاد</option>';
-            DB.committees.forEach(c => { sel.innerHTML += `<option value="${esc(c.id)}">${esc(c.name)}</option>`; });
+            DB.committees.forEach(c => {
+                sel.innerHTML += `<option value="${esc(c.id)}">${esc(c.name)}</option>`;
+            });
             sel.value = val;
-            sel.onchange = () => { const d = !sel.value; document.getElementById('exportCommBtn').disabled = d; document.getElementById('reportCommBtn').disabled = d; document.getElementById('printCommBtn').disabled = d; };
+            sel.onchange = () => {
+                const d = !sel.value;
+                document.getElementById('exportCommBtn').disabled = d;
+                document.getElementById('reportCommBtn').disabled = d;
+                document.getElementById('printCommBtn').disabled = d;
+            };
         }
 
         function renderAll() {
@@ -1899,15 +2014,27 @@
         async function renderAdvancedStats() {
             try {
                 const now = new Date();
-                const weekAgo = new Date(now.getTime() - 7*24*60*60*1000).toISOString();
+                const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000).toISOString();
                 const monthStart = new Date(now.getFullYear(), now.getMonth(), 1).toISOString();
                 const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate()).toISOString();
 
                 const [weekRes, monthRes, adminRes, todayRes, appsRes] = await Promise.all([
-                    supabaseClient.from('applications').select('id', { count:'exact',head:true }).gte('created_at', weekAgo),
-                    supabaseClient.from('applications').select('id', { count:'exact',head:true }).gte('created_at', monthStart),
-                    supabaseClient.from('admin_roles').select('id', { count:'exact',head:true }),
-                    supabaseClient.from('login_log').select('id', { count:'exact',head:true }).gte('created_at', todayStart),
+                    supabaseClient.from('applications').select('id', {
+                        count: 'exact',
+                        head: true
+                    }).gte('created_at', weekAgo),
+                    supabaseClient.from('applications').select('id', {
+                        count: 'exact',
+                        head: true
+                    }).gte('created_at', monthStart),
+                    supabaseClient.from('admin_roles').select('id', {
+                        count: 'exact',
+                        head: true
+                    }),
+                    supabaseClient.from('login_log').select('id', {
+                        count: 'exact',
+                        head: true
+                    }).gte('created_at', todayStart),
                     supabaseClient.from('applications').select('committee_id,national_id')
                 ]);
 
@@ -1919,14 +2046,18 @@
                 if (appsRes.data) {
                     const byComm = {};
                     appsRes.data.forEach(a => {
-                        const name = a.committee_id === 'general' ? 'قيادة الاتحاد' : (DB.committees.find(c => c.id === a.committee_id)?.name || a.committee_id);
-                        if (!byComm[name]) byComm[name] = { total: 0, ذكر: 0, أنثى: 0 };
+                        const name = a.committee_id === 'general' ? 'قيادة الاتحاد' : (DB.committees.find(c => c.id === a.committee_id) ? .name || a.committee_id);
+                        if (!byComm[name]) byComm[name] = {
+                            total: 0,
+                            ذكر: 0,
+                            أنثى: 0
+                        };
                         byComm[name].total++;
                         const gender = getGenderFromNationalID(a.national_id);
                         if (byComm[name][gender] !== undefined) byComm[name][gender]++;
                     });
-                    const entries = Object.entries(byComm).sort((a,b) => b[1].total - a[1].total);
-                    const max = entries.length ? Math.max(...entries.map(([,v]) => v.total)) : 1;
+                    const entries = Object.entries(byComm).sort((a, b) => b[1].total - a[1].total);
+                    const max = entries.length ? Math.max(...entries.map(([, v]) => v.total)) : 1;
                     const html = entries.map(([k, v]) =>
                         `<div style="margin-bottom:.6rem">
                             <div style="display:flex;justify-content:space-between;font-size:.82rem;margin-bottom:.2rem">
@@ -1946,7 +2077,11 @@
                     document.getElementById('appsByCommittee').innerHTML = html || '<span style="color:var(--tl)">لا توجد طلبات</span>';
                 }
 
-                const { data: logs } = await supabaseClient.from('login_log').select('*').order('created_at', { ascending: false }).limit(5);
+                const {
+                    data: logs
+                } = await supabaseClient.from('login_log').select('*').order('created_at', {
+                    ascending: false
+                }).limit(5);
                 if (logs && logs.length) {
                     document.getElementById('loginLogs').innerHTML = logs.map(l =>
                         `<div style="display:flex;justify-content:space-between;padding:.3rem 0;border-bottom:1px solid var(--mg);font-size:.82rem">
@@ -1962,7 +2097,13 @@
 
         async function updateAppsCount() {
             try {
-                const { count, error } = await supabaseClient.from('applications').select('*', { count: 'exact', head: true });
+                const {
+                    count,
+                    error
+                } = await supabaseClient.from('applications').select('*', {
+                    count: 'exact',
+                    head: true
+                });
                 if (!error) document.getElementById('st-apps').textContent = count || 0;
             } catch (_) {}
         }
