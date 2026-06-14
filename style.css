@@ -435,6 +435,28 @@ select {
     transform: translateY(-1px)
 }
 
+.nav-links .nav-sep {
+    width: 1px;
+    height: 24px;
+    background: var(--border);
+    margin: 0 .25rem;
+    opacity: .5
+}
+
+.nav-links .nav-leaders {
+    background: linear-gradient(135deg,#7c3aed,#a855f7);
+    color: #fff!important;
+    padding: .5rem 1.25rem;
+    box-shadow: 0 2px 10px rgba(124,58,237,.3)
+}
+
+.nav-links .nav-leaders:hover,
+.nav-links .nav-leaders.active {
+    background: linear-gradient(135deg,#6d28d9,#9333ea);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 16px rgba(124,58,237,.4)
+}
+
 .theme-toggle {
     display: flex;
     align-items: center;
@@ -506,6 +528,13 @@ select {
 
 .mobile-menu a:last-child {
     border-bottom: none
+}
+
+.mobile-menu .mobile-sep {
+    height: 1px;
+    background: var(--border);
+    margin: .4rem 0;
+    opacity: .4
 }
 
 .mobile-menu a:hover {
