@@ -2046,7 +2046,7 @@
                 if (appsRes.data) {
                     const byComm = {};
                     appsRes.data.forEach(a => {
-                        const name = a.committee_id === 'general' ? 'قيادة الاتحاد' : (DB.committees.find(c => c.id === a.committee_id) ? .name || a.committee_id);
+                        const name = a.committee_id === 'general' ? 'قيادة الاتحاد' : (DB.committees.find(c => c.id === a.committee_id)?.name || a.committee_id);
                         if (!byComm[name]) byComm[name] = {
                             total: 0,
                             ذكر: 0,
