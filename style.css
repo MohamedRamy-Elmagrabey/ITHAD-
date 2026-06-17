@@ -997,7 +997,7 @@ select {
 .committee-icon {
     width: 58px;
     height: 58px;
-    background: linear-gradient(135deg, var(--accent-light), #dbeafe);
+    background: var(--white);
     color: var(--primary);
     border-radius: var(--radius-md);
     display: flex;
@@ -1005,7 +1005,9 @@ select {
     justify-content: center;
     font-size: 1.35rem;
     margin: 0 auto .9rem;
-    transition: var(--transition)
+    transition: var(--transition);
+    border: 1.5px solid var(--accent-light);
+    box-shadow: 0 2px 6px rgba(0,0,0,.06)
 }
 
 .committee-card h4 {
