@@ -561,50 +561,85 @@ select {
     position: absolute;
     inset: 0;
     background: url('alex.jpg') center/cover no-repeat;
-    filter: brightness(.6) saturate(1.2);
+    filter: brightness(.5) blur(4px);
+    transform: scale(1.05);
     pointer-events: none
 }
 
 .hero-bg-overlay {
     position: absolute;
     inset: 0;
-    background: var(--bg-hero);
-    opacity: .65;
+    background: linear-gradient(135deg, rgba(0,102,204,.35) 0%, transparent 50%, rgba(0,200,83,.25) 100%);
     pointer-events: none
 }
 
 .hero-bg-shape {
     position: absolute;
     border-radius: 50%;
-    opacity: .12;
+    filter: blur(60px);
+    opacity: .35;
     pointer-events: none
 }
 
 .shape-1 {
-    width: 600px;
-    height: 600px;
+    width: 500px;
+    height: 500px;
     background: var(--primary);
-    top: -200px;
-    left: -150px;
+    top: -150px;
+    left: -100px;
     animation: floatY 8s ease-in-out infinite
 }
 
 .shape-2 {
-    width: 400px;
-    height: 400px;
+    width: 350px;
+    height: 350px;
     background: var(--accent);
-    bottom: -100px;
-    right: -100px;
+    bottom: -80px;
+    right: -80px;
     animation: floatY 10s ease-in-out infinite reverse
 }
 
 .shape-3 {
+    width: 200px;
+    height: 200px;
+    background: var(--primary-light);
+    top: 40%;
+    right: 20%;
+    animation: floatY 6s ease-in-out infinite;
+    animation-delay: -3s
+}
+
+.shape-4 {
     width: 250px;
     height: 250px;
-    background: var(--primary-light);
-    top: 50%;
-    right: 15%;
-    animation: floatY 6s ease-in-out infinite
+    background: var(--accent);
+    top: 20%;
+    left: 10%;
+    animation: floatY 7s ease-in-out infinite;
+    animation-delay: -1.5s;
+    opacity: .25
+}
+
+.shape-5 {
+    width: 150px;
+    height: 150px;
+    background: var(--primary);
+    bottom: 30%;
+    left: 40%;
+    animation: floatY 9s ease-in-out infinite;
+    animation-delay: -4s;
+    opacity: .2
+}
+
+.shape-6 {
+    width: 180px;
+    height: 180px;
+    background: var(--accent);
+    top: 60%;
+    right: 5%;
+    animation: floatY 8s ease-in-out infinite;
+    animation-delay: -2s;
+    opacity: .2
 }
 
 .hero-content {
@@ -2040,7 +2075,10 @@ select {
         width: 220px;
         height: 220px
     }
-    .shape-3 {
+    .shape-3,
+    .shape-4,
+    .shape-5,
+    .shape-6 {
         display: none
     }
     .about-grid {
