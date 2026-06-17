@@ -1042,17 +1042,19 @@ select {
     align-items: center;
     justify-content: center;
     gap: .75rem;
-    background: linear-gradient(135deg, var(--accent-light), #dbeafe);
-    border: 1.5px solid var(--accent-light);
+    background: var(--white);
+    border: 2px solid var(--accent-light);
     padding: 1rem 2rem;
     border-radius: var(--radius-md);
     color: var(--primary);
-    font-weight: 700;
-    font-size: .95rem
+    font-weight: 800;
+    font-size: .95rem;
+    box-shadow: var(--shadow-sm)
 }
 
 .committees-notice i {
     font-size: 1.2rem;
+    color: var(--accent);
     animation: pulse-ring 2s ease-in-out infinite
 }
 
@@ -2130,6 +2132,11 @@ select {
     }
     .committee-card p{
         font-size:.87rem
+    }
+    .committees-notice {
+        padding: .85rem 1rem;
+        font-size: .9rem;
+        gap: .5rem
     }
     .news-grid {
         grid-template-columns: 1fr
