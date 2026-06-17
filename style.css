@@ -557,6 +557,22 @@ select {
     padding: 80px 1rem 120px
 }
 
+.hero-bg-img {
+    position: absolute;
+    inset: 0;
+    background: url('alex.jpg') center/cover no-repeat;
+    filter: brightness(.6) saturate(1.2);
+    pointer-events: none
+}
+
+.hero-bg-overlay {
+    position: absolute;
+    inset: 0;
+    background: var(--bg-hero);
+    opacity: .65;
+    pointer-events: none
+}
+
 .hero-bg-shape {
     position: absolute;
     border-radius: 50%;
