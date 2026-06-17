@@ -2076,6 +2076,11 @@ select {
     .hero {
         padding: 60px 1rem 100px
     }
+    .hero-content-bg {
+        width: 92%;
+        padding: 2rem 1.25rem;
+        opacity: .7
+    }
     .hero-stats {
         gap: .75rem;
         padding: 1rem 1.25rem
@@ -2212,6 +2217,11 @@ select {
     .hero-logo{
         width:60px;height:60px
     }
+    .hero-content-bg {
+        padding: 1.5rem 1rem;
+        opacity: .75;
+        width: 94%
+    }
     .hero-title{
         font-size:1.6rem
     }
@@ -2237,8 +2247,16 @@ select {
     .committees-grid {
         grid-template-columns: 1fr
     }
+    .hero-content-bg {
+        padding: 1.25rem .75rem;
+        opacity: .8;
+        border-radius: var(--radius-lg)
+    }
     .hero-title {
         font-size: 1.3rem
+    }
+    .hero-subtitle {
+        font-size: .82rem
     }
     .container {
         width: 96vw
